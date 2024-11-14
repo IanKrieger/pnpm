@@ -1,7 +1,7 @@
 {
   "name": "@pnpm/normalize-registries",
   "description": "Accepts a mapping of registry URLs and returns a mapping with the same URLs but normalized",
-  "version": "6.0.6",
+  "version": "6.0.7",
   "bugs": {
     "url": "https://github.com/pnpm/pnpm/issues"
   },
@@ -12,7 +12,7 @@
     "!*.map"
   ],
   "keywords": [
-    "pnpm9"
+    "pnpm10"
   ],
   "license": "MIT",
   "engines": {
@@ -38,5 +38,8 @@
   },
   "exports": {
     ".": "./lib/index.js"
+  },
+  "jest": {
+    "preset": "@pnpm/jest-config"
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "@pnpm/manifest-utils",
   "description": "Utils for dealing with package manifest",
-  "version": "6.0.7",
+  "version": "6.0.9",
   "bugs": {
     "url": "https://github.com/pnpm/pnpm/issues"
   },
@@ -12,7 +12,7 @@
     "!*.map"
   ],
   "keywords": [
-    "pnpm9"
+    "pnpm10"
   ],
   "license": "MIT",
   "engines": {
@@ -39,5 +39,8 @@
   },
   "exports": {
     ".": "./lib/index.js"
+  },
+  "jest": {
+    "preset": "@pnpm/jest-config"
   }
 }

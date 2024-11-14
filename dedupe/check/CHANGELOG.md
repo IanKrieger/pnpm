@@ -1,5 +1,19 @@
 # @pnpm/dedupe.check
 
+## 2.0.11
+
+### Patch Changes
+
+- @pnpm/error@6.0.2
+
+## 2.0.10
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/types@12.2.0
+  - @pnpm/lockfile.types@1.0.3
+
 ## 2.0.9
 
 ### Patch Changes

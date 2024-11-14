@@ -1,7 +1,7 @@
 {
   "name": "@pnpm/pkg-manager.direct-dep-linker",
   "description": "Fast installation using only pnpm-lock.yaml",
-  "version": "3.0.7",
+  "version": "3.0.8",
   "bugs": {
     "url": "https://github.com/pnpm/pnpm/issues"
   },
@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/pnpm/pnpm/blob/main/pkg-manager/direct-dep-linker#readme",
   "keywords": [
-    "pnpm9",
+    "pnpm10",
     "pnpm"
   ],
   "license": "MIT",
@@ -46,5 +46,8 @@
   "funding": "https://opencollective.com/pnpm",
   "exports": {
     ".": "./lib/index.js"
+  },
+  "jest": {
+    "preset": "@pnpm/jest-config"
   }
 }

@@ -1,5 +1,41 @@
 # @pnpm/filter-lockfile
 
+## 1.0.7
+
+### Patch Changes
+
+- @pnpm/package-is-installable@9.0.11
+- @pnpm/dependency-path@5.1.7
+- @pnpm/lockfile.utils@1.0.4
+- @pnpm/lockfile.walker@1.0.4
+
+## 1.0.6
+
+### Patch Changes
+
+- 17b5088: Fix maximum call stack size exceeded error related to circular workspace dependencies [#8599](https://github.com/pnpm/pnpm/pull/8599).
+
+## 1.0.5
+
+### Patch Changes
+
+- Updated dependencies [83681da]
+  - @pnpm/constants@9.0.0
+  - @pnpm/error@6.0.2
+  - @pnpm/package-is-installable@9.0.10
+
+## 1.0.4
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/types@12.2.0
+  - @pnpm/package-is-installable@9.0.9
+  - @pnpm/lockfile.types@1.0.3
+  - @pnpm/lockfile.utils@1.0.3
+  - @pnpm/lockfile.walker@1.0.3
+  - @pnpm/dependency-path@5.1.6
+
 ## 1.0.3
 
 ### Patch Changes

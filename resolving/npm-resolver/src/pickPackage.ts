@@ -1,6 +1,6 @@
-import crypto from 'crypto'
 import { promises as fs } from 'fs'
 import path from 'path'
+import { createHexHash } from '@pnpm/crypto.hash'
 import { PnpmError } from '@pnpm/error'
 import { logger } from '@pnpm/logger'
 import gfs from '@pnpm/graceful-fs'
@@ -236,6 +236,7 @@ function clearMeta (pkg: PackageMeta): PackageMeta {
   const versions: PackageMeta['versions'] = {}
   for (const [version, info] of Object.entries(pkg.versions)) {
     // The list taken from https://github.com/npm/registry/blob/master/docs/responses/package-metadata.md#abbreviated-version-object
+    // with the addition of 'libc'
     versions[version] = pick([
       'name',
       'version',
@@ -250,6 +251,7 @@ function clearMeta (pkg: PackageMeta): PackageMeta {
       'peerDependenciesMeta',
       'cpu',
       'os',
+      'libc',
       'deprecated',
       'bundleDependencies',
       'bundledDependencies',
@@ -268,7 +270,7 @@ function clearMeta (pkg: PackageMeta): PackageMeta {
 
 function encodePkgName (pkgName: string): string {
   if (pkgName !== pkgName.toLowerCase()) {
-    return `${pkgName}_${crypto.createHash('md5').update(pkgName).digest('hex')}`
+    return `${pkgName}_${createHexHash(pkgName)}`
   }
   return pkgName
 }

@@ -1,5 +1,84 @@
 # @pnpm/plugin-commands-patching
 
+## 6.4.14
+
+### Patch Changes
+
+- Updated dependencies [6014522]
+  - @pnpm/plugin-commands-installation@17.2.7
+  - @pnpm/store-connection-manager@8.4.2
+  - @pnpm/cli-utils@4.0.7
+  - @pnpm/config@21.8.5
+  - @pnpm/lockfile.fs@1.0.5
+  - @pnpm/lockfile.utils@1.0.4
+  - @pnpm/patching.apply-patch@3.1.1
+
+## 6.4.13
+
+### Patch Changes
+
+- @pnpm/plugin-commands-installation@17.2.6
+- @pnpm/store-connection-manager@8.4.1
+- @pnpm/cli-utils@4.0.6
+- @pnpm/config@21.8.4
+- @pnpm/patching.apply-patch@3.1.1
+
+## 6.4.12
+
+### Patch Changes
+
+- @pnpm/plugin-commands-installation@17.2.5
+
+## 6.4.11
+
+### Patch Changes
+
+- Updated dependencies [83681da]
+- Updated dependencies [83681da]
+  - @pnpm/store-connection-manager@8.4.0
+  - @pnpm/plugin-commands-installation@17.2.4
+  - @pnpm/constants@9.0.0
+  - @pnpm/config@21.8.4
+  - @pnpm/lockfile.fs@1.0.4
+  - @pnpm/error@6.0.2
+  - @pnpm/cli-utils@4.0.6
+  - @pnpm/patching.apply-patch@3.1.1
+  - @pnpm/read-package-json@9.0.9
+  - @pnpm/read-project-manifest@6.0.9
+
+## 6.4.10
+
+### Patch Changes
+
+- Updated dependencies [ad1fd64]
+- Updated dependencies [eeb76cd]
+  - @pnpm/plugin-commands-installation@17.2.3
+
+## 6.4.9
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/types@12.2.0
+  - @pnpm/cli-utils@4.0.5
+  - @pnpm/config@21.8.3
+  - @pnpm/pick-registry-for-package@6.0.7
+  - @pnpm/lockfile.fs@1.0.3
+  - @pnpm/lockfile.utils@1.0.3
+  - @pnpm/modules-yaml@13.1.7
+  - @pnpm/plugin-commands-installation@17.2.2
+  - @pnpm/read-package-json@9.0.8
+  - @pnpm/read-project-manifest@6.0.8
+  - @pnpm/patching.apply-patch@3.1.0
+  - @pnpm/store-connection-manager@8.3.10
+  - @pnpm/pick-fetcher@3.0.0
+
+## 6.4.8
+
+### Patch Changes
+
+- @pnpm/plugin-commands-installation@17.2.1
+
 ## 6.4.7
 
 ### Patch Changes

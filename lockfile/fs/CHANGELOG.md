@@ -1,5 +1,32 @@
 # @pnpm/lockfile-file
 
+## 1.0.5
+
+### Patch Changes
+
+- @pnpm/dependency-path@5.1.7
+- @pnpm/lockfile.utils@1.0.4
+
+## 1.0.4
+
+### Patch Changes
+
+- Updated dependencies [83681da]
+  - @pnpm/constants@9.0.0
+  - @pnpm/error@6.0.2
+
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/types@12.2.0
+  - @pnpm/lockfile.merger@1.0.3
+  - @pnpm/lockfile.types@1.0.3
+  - @pnpm/lockfile.utils@1.0.3
+  - @pnpm/dependency-path@5.1.6
+  - @pnpm/git-resolver@9.0.8
+
 ## 1.0.2
 
 ### Patch Changes

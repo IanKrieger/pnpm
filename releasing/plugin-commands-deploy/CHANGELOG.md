@@ -1,5 +1,69 @@
 # @pnpm/plugin-commands-deploy
 
+## 5.1.31
+
+### Patch Changes
+
+- Updated dependencies [6014522]
+  - @pnpm/plugin-commands-installation@17.2.7
+  - @pnpm/cli-utils@4.0.7
+  - @pnpm/fs.indexed-pkg-importer@6.0.9
+  - @pnpm/directory-fetcher@8.0.9
+
+## 5.1.30
+
+### Patch Changes
+
+- @pnpm/plugin-commands-installation@17.2.6
+- @pnpm/cli-utils@4.0.6
+- @pnpm/fs.indexed-pkg-importer@6.0.9
+- @pnpm/directory-fetcher@8.0.9
+
+## 5.1.29
+
+### Patch Changes
+
+- @pnpm/plugin-commands-installation@17.2.5
+
+## 5.1.28
+
+### Patch Changes
+
+- Updated dependencies [83681da]
+  - @pnpm/plugin-commands-installation@17.2.4
+  - @pnpm/error@6.0.2
+  - @pnpm/cli-utils@4.0.6
+  - @pnpm/catalogs.resolver@0.1.1
+  - @pnpm/fs.indexed-pkg-importer@6.0.9
+  - @pnpm/directory-fetcher@8.0.9
+
+## 5.1.27
+
+### Patch Changes
+
+- ad1fd64: Fix a regression in which `pnpm deploy` with `node-linker=hoisted` produces an empty `node_modules` directory [#6682](https://github.com/pnpm/pnpm/issues/6682).
+- eeb76cd: `pnpm deploy` should work in workspace with `shared-workspace-lockfile=false` [#8475](https://github.com/pnpm/pnpm/issues/8475).
+- Updated dependencies [ad1fd64]
+- Updated dependencies [eeb76cd]
+  - @pnpm/plugin-commands-installation@17.2.3
+
+## 5.1.26
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/types@12.2.0
+  - @pnpm/cli-utils@4.0.5
+  - @pnpm/directory-fetcher@8.0.8
+  - @pnpm/plugin-commands-installation@17.2.2
+  - @pnpm/fs.indexed-pkg-importer@6.0.9
+
+## 5.1.25
+
+### Patch Changes
+
+- @pnpm/plugin-commands-installation@17.2.1
+
 ## 5.1.24
 
 ### Patch Changes

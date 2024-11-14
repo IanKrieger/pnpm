@@ -215,14 +215,15 @@ function toImporterDepPaths (
     }))
     .map(Object.entries)
 
-  const { depPaths, importerIds: nextImporterIds } = parseDepRefs(unnest(importerDeps), lockfile)
+  let { depPaths, importerIds: nextImporterIds } = parseDepRefs(unnest(importerDeps), lockfile)
 
   if (!nextImporterIds.length) {
     return depPaths
   }
-  nextImporterIds.forEach((importerId) => {
+  nextImporterIds = nextImporterIds.filter(importerId => !opts.importerIdSet.has(importerId))
+  for (const importerId of nextImporterIds) {
     opts.importerIdSet.add(importerId)
-  })
+  }
   return [
     ...depPaths,
     ...toImporterDepPaths(lockfile, nextImporterIds, opts),
@@ -235,18 +236,21 @@ interface ParsedDepRefs {
 }
 
 function parseDepRefs (refsByPkgNames: Array<[string, string]>, lockfile: Lockfile): ParsedDepRefs {
-  return refsByPkgNames
-    .reduce((acc, [pkgName, ref]) => {
-      if (ref.startsWith('link:')) {
-        const importerId = ref.substring(5) as ProjectId
-        if (lockfile.importers[importerId]) {
-          acc.importerIds.push(importerId)
-        }
-        return acc
+  const acc: ParsedDepRefs = {
+    depPaths: [],
+    importerIds: [],
+  }
+  for (const [pkgName, ref] of refsByPkgNames) {
+    if (ref.startsWith('link:')) {
+      const importerId = ref.substring(5) as ProjectId
+      if (lockfile.importers[importerId]) {
+        acc.importerIds.push(importerId)
       }
-      const depPath = dp.refToRelative(ref, pkgName)
-      if (depPath == null) return acc
-      acc.depPaths.push(depPath)
-      return acc
-    }, { depPaths: [], importerIds: [] } as ParsedDepRefs)
+      continue
+    }
+    const depPath = dp.refToRelative(ref, pkgName)
+    if (depPath == null) continue
+    acc.depPaths.push(depPath)
+  }
+  return acc
 }

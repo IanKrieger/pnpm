@@ -1,5 +1,55 @@
 # @pnpm/outdated
 
+## 15.1.7
+
+### Patch Changes
+
+- Updated dependencies [222d10a]
+  - @pnpm/npm-resolver@21.1.1
+  - @pnpm/dependency-path@5.1.7
+  - @pnpm/client@11.1.12
+  - @pnpm/lockfile.fs@1.0.5
+  - @pnpm/lockfile.utils@1.0.4
+
+## 15.1.6
+
+### Patch Changes
+
+- @pnpm/client@11.1.11
+- @pnpm/npm-resolver@21.1.0
+
+## 15.1.5
+
+### Patch Changes
+
+- Updated dependencies [83681da]
+- Updated dependencies [b7fb704]
+  - @pnpm/constants@9.0.0
+  - @pnpm/npm-resolver@21.1.0
+  - @pnpm/hooks.read-package-hook@5.1.0
+  - @pnpm/lockfile.fs@1.0.4
+  - @pnpm/error@6.0.2
+  - @pnpm/catalogs.resolver@0.1.1
+  - @pnpm/parse-overrides@5.1.1
+  - @pnpm/manifest-utils@6.0.9
+  - @pnpm/client@11.1.10
+
+## 15.1.4
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/types@12.2.0
+  - @pnpm/pick-registry-for-package@6.0.7
+  - @pnpm/hooks.read-package-hook@5.0.3
+  - @pnpm/lockfile.fs@1.0.3
+  - @pnpm/lockfile.utils@1.0.3
+  - @pnpm/dependency-path@5.1.6
+  - @pnpm/client@11.1.9
+  - @pnpm/modules-yaml@13.1.7
+  - @pnpm/manifest-utils@6.0.8
+  - @pnpm/npm-resolver@21.0.5
+
 ## 15.1.3
 
 ### Patch Changes

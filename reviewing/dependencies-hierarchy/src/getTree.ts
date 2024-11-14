@@ -13,6 +13,7 @@ interface GetTreeOpts {
   maxDepth: number
   rewriteLinkVersionDir: string
   includeOptionalDependencies: boolean
+  excludePeerDependencies?: boolean
   lockfileDir: string
   onlyProjects?: boolean
   search?: SearchFunction
@@ -124,7 +125,8 @@ function getTreeHelper (
   let resultHeight: number | 'unknown' = 0
   let resultCircular: boolean = false
 
-  Object.entries(deps).forEach(([alias, ref]) => {
+  for (const alias in deps) {
+    const ref = deps[alias]
     const packageInfo = getPkgInfo({
       alias,
       currentPackages: opts.currentPackages,
@@ -150,7 +152,7 @@ function getTreeHelper (
     })
 
     if (opts.onlyProjects && nodeId?.type !== 'importer') {
-      return
+      continue
     } else if (nodeId == null) {
       circular = false
       if (opts.search == null || matchedSearched) {
@@ -209,9 +211,11 @@ function getTreeHelper (
       if (matchedSearched) {
         newEntry.searched = true
       }
-      resultDependencies.push(newEntry)
+      if (!newEntry.isPeer || !opts.excludePeerDependencies || newEntry.dependencies?.length) {
+        resultDependencies.push(newEntry)
+      }
     }
-  })
+  }
 
   const result: DependencyInfo = {
     dependencies: resultDependencies,

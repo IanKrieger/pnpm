@@ -1,5 +1,35 @@
 # @pnpm/get-context
 
+## 12.0.7
+
+### Patch Changes
+
+- f9a095c: Don't purge `node_modules`, when typing "n" in the prompt that asks whether to remove `node_modules` before installation [#8655](https://github.com/pnpm/pnpm/pull/8655).
+  - @pnpm/lockfile.fs@1.0.5
+  - @pnpm/read-projects-context@9.1.13
+
+## 12.0.6
+
+### Patch Changes
+
+- Updated dependencies [83681da]
+  - @pnpm/constants@9.0.0
+  - @pnpm/lockfile.fs@1.0.4
+  - @pnpm/error@6.0.2
+  - @pnpm/read-projects-context@9.1.12
+
+## 12.0.5
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/types@12.2.0
+  - @pnpm/lockfile.fs@1.0.3
+  - @pnpm/core-loggers@10.0.7
+  - @pnpm/modules-yaml@13.1.7
+  - @pnpm/read-projects-context@9.1.11
+  - @pnpm/resolver-base@13.0.4
+
 ## 12.0.4
 
 ### Patch Changes

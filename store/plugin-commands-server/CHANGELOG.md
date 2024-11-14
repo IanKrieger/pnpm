@@ -1,5 +1,45 @@
 # @pnpm/plugin-commands-server
 
+## 7.0.27
+
+### Patch Changes
+
+- @pnpm/server@18.2.6
+- @pnpm/store-connection-manager@8.4.2
+- @pnpm/cli-utils@4.0.7
+- @pnpm/config@21.8.5
+
+## 7.0.26
+
+### Patch Changes
+
+- @pnpm/server@18.2.6
+- @pnpm/store-connection-manager@8.4.1
+- @pnpm/cli-utils@4.0.6
+- @pnpm/config@21.8.4
+
+## 7.0.25
+
+### Patch Changes
+
+- Updated dependencies [83681da]
+  - @pnpm/store-connection-manager@8.4.0
+  - @pnpm/config@21.8.4
+  - @pnpm/error@6.0.2
+  - @pnpm/server@18.2.6
+  - @pnpm/cli-utils@4.0.6
+  - @pnpm/store-path@9.0.2
+
+## 7.0.24
+
+### Patch Changes
+
+- @pnpm/cli-meta@6.2.2
+- @pnpm/cli-utils@4.0.5
+- @pnpm/config@21.8.3
+- @pnpm/server@18.2.6
+- @pnpm/store-connection-manager@8.3.10
+
 ## 7.0.23
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 {
   "name": "@pnpm/core-loggers",
   "description": "Core loggers of pnpm",
-  "version": "10.0.6",
+  "version": "10.0.7",
   "bugs": {
     "url": "https://github.com/pnpm/pnpm/issues"
   },
@@ -22,7 +22,7 @@
     "test": "test"
   },
   "keywords": [
-    "pnpm9"
+    "pnpm10"
   ],
   "license": "MIT",
   "engines": {
@@ -43,5 +43,8 @@
   "funding": "https://opencollective.com/pnpm",
   "exports": {
     ".": "./lib/index.js"
+  },
+  "jest": {
+    "preset": "@pnpm/jest-config"
   }
 }

@@ -1,5 +1,44 @@
 # @pnpm/plugin-commands-licenses
 
+## 4.1.22
+
+### Patch Changes
+
+- @pnpm/license-scanner@3.1.17
+- @pnpm/cli-utils@4.0.7
+- @pnpm/config@21.8.5
+- @pnpm/lockfile.fs@1.0.5
+
+## 4.1.21
+
+### Patch Changes
+
+- @pnpm/license-scanner@3.1.16
+- @pnpm/cli-utils@4.0.6
+- @pnpm/config@21.8.4
+
+## 4.1.20
+
+### Patch Changes
+
+- Updated dependencies [83681da]
+  - @pnpm/constants@9.0.0
+  - @pnpm/config@21.8.4
+  - @pnpm/lockfile.fs@1.0.4
+  - @pnpm/error@6.0.2
+  - @pnpm/license-scanner@3.1.15
+  - @pnpm/cli-utils@4.0.6
+  - @pnpm/store-path@9.0.2
+
+## 4.1.19
+
+### Patch Changes
+
+- @pnpm/cli-utils@4.0.5
+- @pnpm/config@21.8.3
+- @pnpm/lockfile.fs@1.0.3
+- @pnpm/license-scanner@3.1.14
+
 ## 4.1.18
 
 ### Patch Changes

@@ -1,5 +1,27 @@
 # @pnpm/package-is-installable
 
+## 9.0.11
+
+### Patch Changes
+
+- Updated dependencies [d04f7f2]
+  - @pnpm/env.system-node-version@1.0.0
+
+## 9.0.10
+
+### Patch Changes
+
+- @pnpm/error@6.0.2
+
+## 9.0.9
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/types@12.2.0
+  - @pnpm/cli-meta@6.2.2
+  - @pnpm/core-loggers@10.0.7
+
 ## 9.0.8
 
 ### Patch Changes

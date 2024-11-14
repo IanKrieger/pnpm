@@ -1,5 +1,37 @@
 # @pnpm/cli-utils
 
+## 4.0.7
+
+### Patch Changes
+
+- @pnpm/package-is-installable@9.0.11
+- @pnpm/config@21.8.5
+- @pnpm/default-reporter@14.0.4
+
+## 4.0.6
+
+### Patch Changes
+
+- @pnpm/default-reporter@14.0.3
+- @pnpm/config@21.8.4
+- @pnpm/error@6.0.2
+- @pnpm/package-is-installable@9.0.10
+- @pnpm/manifest-utils@6.0.9
+- @pnpm/read-project-manifest@6.0.9
+
+## 4.0.5
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/types@12.2.0
+  - @pnpm/cli-meta@6.2.2
+  - @pnpm/default-reporter@14.0.2
+  - @pnpm/config@21.8.3
+  - @pnpm/package-is-installable@9.0.9
+  - @pnpm/manifest-utils@6.0.8
+  - @pnpm/read-project-manifest@6.0.8
+
 ## 4.0.4
 
 ### Patch Changes

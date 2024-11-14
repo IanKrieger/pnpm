@@ -1,5 +1,60 @@
 # @pnpm/plugin-commands-store
 
+## 9.2.15
+
+### Patch Changes
+
+- Updated dependencies [f9a095c]
+- Updated dependencies [a1f4df2]
+  - @pnpm/get-context@12.0.7
+  - @pnpm/store.cafs@4.0.2
+  - @pnpm/dependency-path@5.1.7
+  - @pnpm/store-connection-manager@8.4.2
+  - @pnpm/cli-utils@4.0.7
+  - @pnpm/config@21.8.5
+  - @pnpm/lockfile.utils@1.0.4
+
+## 9.2.14
+
+### Patch Changes
+
+- Updated dependencies [db7ff76]
+  - @pnpm/store.cafs@4.0.1
+  - @pnpm/store-connection-manager@8.4.1
+  - @pnpm/cli-utils@4.0.6
+  - @pnpm/config@21.8.4
+
+## 9.2.13
+
+### Patch Changes
+
+- 81bd942: Prevent `ENOENT` errors caused by running `store prune` in parallel [#8586](https://github.com/pnpm/pnpm/pull/8586).
+- Updated dependencies [83681da]
+  - @pnpm/store-connection-manager@8.4.0
+  - @pnpm/config@21.8.4
+  - @pnpm/error@6.0.2
+  - @pnpm/get-context@12.0.6
+  - @pnpm/cli-utils@4.0.6
+  - @pnpm/store-path@9.0.2
+
+## 9.2.12
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+- Updated dependencies [db420ab]
+  - @pnpm/types@12.2.0
+  - @pnpm/store.cafs@4.0.0
+  - @pnpm/cli-utils@4.0.5
+  - @pnpm/config@21.8.3
+  - @pnpm/normalize-registries@6.0.7
+  - @pnpm/pick-registry-for-package@6.0.7
+  - @pnpm/lockfile.utils@1.0.3
+  - @pnpm/dependency-path@5.1.6
+  - @pnpm/get-context@12.0.5
+  - @pnpm/store-controller-types@18.1.6
+  - @pnpm/store-connection-manager@8.3.10
+
 ## 9.2.11
 
 ### Patch Changes

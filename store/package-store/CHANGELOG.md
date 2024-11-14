@@ -1,5 +1,54 @@
 # @pnpm/package-store
 
+## 20.4.2
+
+### Patch Changes
+
+- Updated dependencies [222d10a]
+- Updated dependencies [a1f4df2]
+  - @pnpm/worker@1.0.13
+  - @pnpm/store.cafs@4.0.2
+  - @pnpm/package-requester@25.2.10
+  - @pnpm/create-cafs-store@7.0.11
+
+## 20.4.1
+
+### Patch Changes
+
+- Updated dependencies [db7ff76]
+  - @pnpm/store.cafs@4.0.1
+  - @pnpm/package-requester@25.2.9
+  - @pnpm/create-cafs-store@7.0.10
+  - @pnpm/worker@1.0.12
+
+## 20.4.0
+
+### Minor Changes
+
+- 83681da: Keep `libc` field in `clearMeta`.
+
+### Patch Changes
+
+- 25d37f5: `pnpm store prune` should not fail if the store directory doesn't exist.
+  - @pnpm/package-requester@25.2.8
+  - @pnpm/worker@1.0.11
+  - @pnpm/create-cafs-store@7.0.9
+
+## 20.3.7
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+- Updated dependencies [db420ab]
+  - @pnpm/types@12.2.0
+  - @pnpm/store.cafs@4.0.0
+  - @pnpm/fetcher-base@16.0.7
+  - @pnpm/package-requester@25.2.7
+  - @pnpm/resolver-base@13.0.4
+  - @pnpm/store-controller-types@18.1.6
+  - @pnpm/worker@1.0.10
+  - @pnpm/create-cafs-store@7.0.9
+
 ## 20.3.6
 
 ### Patch Changes

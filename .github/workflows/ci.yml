@@ -33,18 +33,21 @@ jobs:
         git config --global user.email "x@y.z"
     - name: Checkout Commit
       uses: actions/checkout@v4
+      with:
+        lfs: true
     - name: Install pnpm
       uses: pnpm/action-setup@v4.0.0
       with:
         standalone: true
     - name: Setup Node
       run: pnpm env use -g ${{ matrix.node }}
+      timeout-minutes: 1
     - name: Install npm@8
       run: pnpm add --global npm@8
+      timeout-minutes: 1
     - name: pnpm install
       run: pnpm install
-    - name: Audit
-      run: pnpm audit
+      timeout-minutes: 1
     # - name: Cache TypeScript and Jest
       # uses: actions/cache@v3
       # with:
@@ -59,13 +62,13 @@ jobs:
         # restore-keys: ts-jest-${{ matrix.platform }}-${{ matrix.node }}-
     - name: run tests (main)
       timeout-minutes: 60
-      if: github.ref == 'refs/heads/main'
+      if: github.ref_name == 'main'
       run: pnpm run test-main
       env:
         PNPM_WORKERS: 3
     - name: run tests (branch)
       timeout-minutes: 60
-      if: github.ref != 'refs/heads/main'
+      if: github.ref_name != 'main'
       run: pnpm run test-branch
       env:
         PNPM_WORKERS: 3

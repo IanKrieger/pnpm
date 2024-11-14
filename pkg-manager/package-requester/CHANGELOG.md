@@ -1,5 +1,51 @@
 # @pnpm/package-requester
 
+## 25.2.10
+
+### Patch Changes
+
+- Updated dependencies [222d10a]
+- Updated dependencies [a1f4df2]
+  - @pnpm/worker@1.0.13
+  - @pnpm/store.cafs@4.0.2
+  - @pnpm/package-is-installable@9.0.11
+  - @pnpm/dependency-path@5.1.7
+
+## 25.2.9
+
+### Patch Changes
+
+- Updated dependencies [db7ff76]
+  - @pnpm/store.cafs@4.0.1
+  - @pnpm/worker@1.0.12
+
+## 25.2.8
+
+### Patch Changes
+
+- @pnpm/error@6.0.2
+- @pnpm/package-is-installable@9.0.10
+- @pnpm/read-package-json@9.0.9
+- @pnpm/worker@1.0.11
+
+## 25.2.7
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+- Updated dependencies [db420ab]
+  - @pnpm/types@12.2.0
+  - @pnpm/store.cafs@4.0.0
+  - @pnpm/package-is-installable@9.0.9
+  - @pnpm/fetcher-base@16.0.7
+  - @pnpm/core-loggers@10.0.7
+  - @pnpm/dependency-path@5.1.6
+  - @pnpm/read-package-json@9.0.8
+  - @pnpm/resolver-base@13.0.4
+  - @pnpm/store-controller-types@18.1.6
+  - @pnpm/worker@1.0.10
+  - @pnpm/pick-fetcher@3.0.0
+
 ## 25.2.6
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@pnpm/directory-fetcher",
-  "version": "8.0.7",
+  "version": "8.0.9",
   "description": "A fetcher for local directory packages",
   "funding": "https://opencollective.com/pnpm",
   "main": "lib/index.js",
@@ -21,7 +21,7 @@
     "node": ">=18.12"
   },
   "keywords": [
-    "pnpm9",
+    "pnpm10",
     "pnpm",
     "fetcher"
   ],
@@ -49,5 +49,8 @@
   },
   "exports": {
     ".": "./lib/index.js"
+  },
+  "jest": {
+    "preset": "@pnpm/jest-config"
   }
 }

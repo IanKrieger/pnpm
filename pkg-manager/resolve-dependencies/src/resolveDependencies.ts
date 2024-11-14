@@ -219,6 +219,7 @@ export type PeerDependencies = Record<string, PeerDependency>
 
 export interface ResolvedPackage {
   id: PkgResolutionId
+  isLeaf: boolean
   resolution: Resolution
   prod: boolean
   dev: boolean
@@ -349,6 +350,7 @@ export async function resolveRootDependencies (
           ...options,
           parentPkgAliases,
           publishedBy,
+          updateToLatest: false,
         })
         importerResolutionResult.pkgAddresses.push(...resolveDependenciesResult.pkgAddresses)
         Object.assign(importerResolutionResult,
@@ -369,6 +371,7 @@ export async function resolveRootDependencies (
             ...options,
             parentPkgAliases,
             publishedBy,
+            updateToLatest: false,
           })
           pkgAddressesByImportersWithoutPeers[index].pkgAddresses.push(...resolveDependenciesResult.pkgAddresses)
           Object.assign(pkgAddressesByImportersWithoutPeers[index],
@@ -1417,14 +1420,14 @@ async function resolveDependency (
   }
 
   if (pkg.peerDependencies != null) {
-    Object.keys(pkg.peerDependencies).forEach((name) => {
+    for (const name in pkg.peerDependencies) {
       ctx.allPeerDepNames.add(name)
-    })
+    }
   }
   if (pkg.peerDependenciesMeta != null) {
-    Object.keys(pkg.peerDependenciesMeta).forEach((name) => {
+    for (const name in pkg.peerDependenciesMeta) {
       ctx.allPeerDepNames.add(name)
-    })
+    }
   }
   // In case of leaf dependencies (dependencies that have no prod deps or peer deps),
   // we only ever need to analyze one leaf dep in a graph, so the nodeId can be short and stateless.
@@ -1607,6 +1610,7 @@ function getResolvedPackage (
       os: options.pkg.os,
       libc: options.pkg.libc,
     },
+    isLeaf: pkgIsLeaf(options.pkg),
     pkgIdWithPatchHash: options.pkgIdWithPatchHash,
     dev: options.wantedDependency.dev,
     fetching: options.pkgResponse.fetching!,

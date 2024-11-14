@@ -1,5 +1,64 @@
 # @pnpm/plugin-commands-publishing
 
+## 10.0.12
+
+### Patch Changes
+
+- Updated dependencies [d04f7f2]
+  - @pnpm/plugin-commands-env@5.1.11
+  - @pnpm/client@11.1.12
+  - @pnpm/cli-utils@4.0.7
+  - @pnpm/config@21.8.5
+  - @pnpm/lifecycle@17.1.5
+  - @pnpm/exportable-manifest@7.0.6
+
+## 10.0.11
+
+### Patch Changes
+
+- @pnpm/plugin-commands-env@5.1.10
+- @pnpm/client@11.1.11
+- @pnpm/cli-utils@4.0.6
+- @pnpm/config@21.8.4
+- @pnpm/lifecycle@17.1.5
+- @pnpm/exportable-manifest@7.0.6
+
+## 10.0.10
+
+### Patch Changes
+
+- 9cfee8f: `pnpm publish` should be able to publish from a local tarball [#7950](https://github.com/pnpm/pnpm/issues/7950).
+
+## 10.0.9
+
+### Patch Changes
+
+- @pnpm/config@21.8.4
+- @pnpm/error@6.0.2
+- @pnpm/cli-utils@4.0.6
+- @pnpm/plugin-commands-env@5.1.9
+- @pnpm/lifecycle@17.1.5
+- @pnpm/network.auth-header@3.0.2
+- @pnpm/exportable-manifest@7.0.6
+- @pnpm/client@11.1.10
+
+## 10.0.8
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/types@12.2.0
+  - @pnpm/cli-utils@4.0.5
+  - @pnpm/config@21.8.3
+  - @pnpm/pick-registry-for-package@6.0.7
+  - @pnpm/plugin-commands-env@5.1.8
+  - @pnpm/lifecycle@17.1.4
+  - @pnpm/client@11.1.9
+  - @pnpm/package-bins@9.0.7
+  - @pnpm/exportable-manifest@7.0.5
+  - @pnpm/resolver-base@13.0.4
+  - @pnpm/sort-packages@6.0.8
+
 ## 10.0.7
 
 ### Patch Changes

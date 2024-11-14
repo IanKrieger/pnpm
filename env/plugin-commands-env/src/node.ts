@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import util from 'util'
 import { type Config } from '@pnpm/config'
+import { getSystemNodeVersion } from '@pnpm/env.system-node-version'
 import { createFetchFromRegistry, type FetchFromRegistry } from '@pnpm/fetch'
 import { globalInfo } from '@pnpm/logger'
 import { fetchNode } from '@pnpm/node.fetcher'
@@ -40,7 +41,9 @@ export type NvmNodeCommandOptions = Pick<Config,
 const nodeFetchPromises: Record<string, Promise<string>> = {}
 
 export async function prepareExecutionEnv (config: NvmNodeCommandOptions, { extraBinPaths, executionEnv }: PrepareExecutionEnvOptions): Promise<PrepareExecutionEnvResult> {
-  if (!executionEnv?.nodeVersion) return { extraBinPaths: extraBinPaths ?? [] }
+  if (!executionEnv?.nodeVersion || `v${executionEnv.nodeVersion}` === getSystemNodeVersion()) {
+    return { extraBinPaths: extraBinPaths ?? [] }
+  }
 
   let nodePathPromise = nodeFetchPromises[executionEnv.nodeVersion]
   if (!nodePathPromise) {
@@ -94,11 +97,10 @@ export async function getNodeDir (fetch: FetchFromRegistry, opts: NvmNodeCommand
       storePath: opts.storeDir,
       pnpmHomeDir: opts.pnpmHomeDir,
     })
-    const cafsDir = path.join(storeDir, 'files')
     globalInfo(`Fetching Node.js ${opts.useNodeVersion} ...`)
     await fetchNode(fetch, opts.useNodeVersion, versionDir, {
       ...opts,
-      cafsDir,
+      storeDir,
       retry: {
         maxTimeout: opts.fetchRetryMaxtimeout,
         minTimeout: opts.fetchRetryMintimeout,

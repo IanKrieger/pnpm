@@ -44,14 +44,13 @@ export function renderPeerIssues (
         if (allowedVersionsMatchAll[peerName]?.some((range) => semver.satisfies(issue.foundVersion, range))) continue
         const currentParentPkg = issue.parents.at(-1)
         if (currentParentPkg && allowedVersionsByParentPkgName[peerName]?.[currentParentPkg.name]) {
-          const allowedVersionsByParent = allowedVersionsByParentPkgName[peerName][currentParentPkg.name]
-            .reduce((acc, { targetPkg, parentPkg, ranges }) => {
-              if (!parentPkg.pref || currentParentPkg.version &&
-                (isSubRange(parentPkg.pref, currentParentPkg.version) || semver.satisfies(currentParentPkg.version, parentPkg.pref))) {
-                acc[targetPkg.name] = ranges
-              }
-              return acc
-            }, {} as Record<string, string[]>)
+          const allowedVersionsByParent: Record<string, string[]> = {}
+          for (const { targetPkg, parentPkg, ranges } of allowedVersionsByParentPkgName[peerName][currentParentPkg.name]) {
+            if (!parentPkg.pref || currentParentPkg.version &&
+              (isSubRange(parentPkg.pref, currentParentPkg.version) || semver.satisfies(currentParentPkg.version, parentPkg.pref))) {
+              allowedVersionsByParent[targetPkg.name] = ranges
+            }
+          }
           if (allowedVersionsByParent[peerName]?.some((range) => semver.satisfies(issue.foundVersion, range))) continue
         }
         createTree(projects[projectId], issue.parents, formatUnmetPeerMessage({
@@ -81,7 +80,7 @@ export function renderPeerIssues (
           `Peer dependencies that should be installed:\n  ${cliColumns(Object.entries(intersections).map(([name, version]) => formatNameAndRange(name, version)), cliColumnsOptions)}`
         )
       }
-      const title = chalk.white(projectKey)
+      const title = chalk.reset(projectKey)
       let summariesConcatenated = summaries.join('\n')
       if (summariesConcatenated) {
         summariesConcatenated += '\n'
@@ -115,6 +114,11 @@ interface PkgNode {
 }
 
 function createTree (pkgNode: PkgNode, pkgs: Array<{ name: string, version: string }>, issueText: string): void {
+  if (pkgs.length === 0) {
+    // This will happen if incorrect data is passed to the reporter.
+    // It is better to print something instead of crashing.
+    pkgs = [{ name: '<unknown>', version: '<unknown>' }]
+  }
   const [pkg, ...rest] = pkgs
   const label = `${pkg.name} ${chalk.grey(pkg.version)}`
   if (!pkgNode.dependencies[label]) {

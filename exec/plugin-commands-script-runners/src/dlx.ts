@@ -4,7 +4,7 @@ import util from 'util'
 import { docsUrl } from '@pnpm/cli-utils'
 import { OUTPUT_OPTIONS } from '@pnpm/common-cli-options-help'
 import { type Config, types } from '@pnpm/config'
-import { createBase32Hash } from '@pnpm/crypto.base32-hash'
+import { createHexHash } from '@pnpm/crypto.hash'
 import { PnpmError } from '@pnpm/error'
 import { add } from '@pnpm/plugin-commands-installation'
 import { readPackageJsonFromDir } from '@pnpm/read-package-json'
@@ -64,7 +64,7 @@ export function help (): string {
 export type DlxCommandOptions = {
   package?: string[]
   shellMode?: boolean
-} & Pick<Config, 'extraBinPaths' | 'registries' | 'reporter' | 'userAgent' | 'cacheDir' | 'dlxCacheMaxAge' | 'useNodeVersion'> & add.AddCommandOptions
+} & Pick<Config, 'extraBinPaths' | 'registries' | 'reporter' | 'userAgent' | 'cacheDir' | 'dlxCacheMaxAge' | 'useNodeVersion' | 'symlink'> & add.AddCommandOptions
 
 export async function handler (
   opts: DlxCommandOptions,
@@ -81,7 +81,7 @@ export async function handler (
     await add.handler({
       // Ideally the config reader should ignore these settings when the dlx command is executed.
       // This is a temporary solution until "@pnpm/config" is refactored.
-      ...omit(['workspaceDir', 'rootProjectManifest'], opts),
+      ...omit(['workspaceDir', 'rootProjectManifest', 'symlink'], opts),
       bin: path.join(cachedDir, 'node_modules/.bin'),
       dir: cachedDir,
       lockfileDir: cachedDir,
@@ -91,7 +91,18 @@ export async function handler (
       saveOptional: false,
       savePeer: false,
     }, pkgs)
-    await symlinkDir(cachedDir, cacheLink, { overwrite: true })
+    try {
+      await symlinkDir(cachedDir, cacheLink, { overwrite: true })
+    } catch (error) {
+      // EBUSY means that there is another dlx process running in parallel that has acquired the cache link first.
+      // Similarly, EEXIST means that another dlx process has created the cache link before this process.
+      // The link created by the other process is just as up-to-date as the link the current process was attempting
+      // to create. Therefore, instead of re-attempting to create the current link again, it is just as good to let
+      // the other link stay. The current process should yield.
+      if (!util.types.isNativeError(error) || !('code' in error) || (error.code !== 'EBUSY' && error.code !== 'EEXIST')) {
+        throw error
+      }
+    }
   }
   const modulesDir = path.join(cachedDir, 'node_modules')
   const binsDir = path.join(modulesDir, '.bin')
@@ -190,7 +201,7 @@ export function createCacheKey (pkgs: string[], registries: Record<string, strin
   const sortedPkgs = [...pkgs].sort((a, b) => a.localeCompare(b))
   const sortedRegistries = Object.entries(registries).sort(([k1], [k2]) => k1.localeCompare(k2))
   const hashStr = JSON.stringify([sortedPkgs, sortedRegistries])
-  return createBase32Hash(hashStr)
+  return createHexHash(hashStr)
 }
 
 function getValidCacheDir (cacheLink: string, dlxCacheMaxAge: number): string | undefined {

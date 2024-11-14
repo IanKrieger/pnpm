@@ -1,5 +1,25 @@
 # @pnpm-private/updater
 
+## 2.0.16
+
+### Patch Changes
+
+- @pnpm/lockfile.fs@1.0.5
+
+## 2.0.15
+
+### Patch Changes
+
+- @pnpm/lockfile.fs@1.0.4
+
+## 2.0.14
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/types@12.2.0
+  - @pnpm/lockfile.fs@1.0.3
+
 ## 2.0.13
 
 ### Patch Changes

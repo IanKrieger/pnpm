@@ -60,7 +60,7 @@ export const DEFAULT_OPTS = {
   useRunningStoreServer: false,
   useStoreServer: false,
   workspaceConcurrency: 4,
-  virtualStoreDirMaxLength: 120,
+  virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
   peersSuffixMaxLength: 1000,
 }
 
@@ -82,7 +82,7 @@ describe('plugin-commands-audit', () => {
       userConfig: {},
       rawConfig,
       registries,
-      virtualStoreDirMaxLength: 120,
+      virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
     })
     expect(exitCode).toBe(1)
     expect(stripAnsi(output)).toMatchSnapshot()
@@ -100,7 +100,7 @@ describe('plugin-commands-audit', () => {
       userConfig: {},
       rawConfig,
       registries,
-      virtualStoreDirMaxLength: 120,
+      virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
     })
 
     expect(exitCode).toBe(1)
@@ -118,7 +118,7 @@ describe('plugin-commands-audit', () => {
       userConfig: {},
       rawConfig,
       registries,
-      virtualStoreDirMaxLength: 120,
+      virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
     })
 
     expect(exitCode).toBe(1)
@@ -135,7 +135,7 @@ describe('plugin-commands-audit', () => {
       userConfig: {},
       rawConfig,
       registries,
-      virtualStoreDirMaxLength: 120,
+      virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
     })
 
     expect(stripAnsi(output)).toBe('No known vulnerabilities found\n')
@@ -153,7 +153,7 @@ describe('plugin-commands-audit', () => {
       userConfig: {},
       rawConfig,
       registries,
-      virtualStoreDirMaxLength: 120,
+      virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
     })
 
     const json = JSON.parse(output)
@@ -173,7 +173,7 @@ describe('plugin-commands-audit', () => {
       rawConfig,
       dev: true,
       registries,
-      virtualStoreDirMaxLength: 120,
+      virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
     })
 
     expect(exitCode).toBe(0)
@@ -194,7 +194,7 @@ describe('plugin-commands-audit', () => {
       userConfig: {},
       rawConfig,
       registries,
-      virtualStoreDirMaxLength: 120,
+      virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
     })
 
     expect(exitCode).toBe(0)
@@ -216,7 +216,7 @@ describe('plugin-commands-audit', () => {
         [`${registries.default.replace(/^https?:/, '')}:_authToken`]: '123',
       },
       registries,
-      virtualStoreDirMaxLength: 120,
+      virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
     })
 
     expect(stripAnsi(output)).toBe('No known vulnerabilities found\n')
@@ -237,7 +237,7 @@ describe('plugin-commands-audit', () => {
       userConfig: {},
       rawConfig,
       registries,
-      virtualStoreDirMaxLength: 120,
+      virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
     })).rejects.toThrow(AuditEndpointNotExistsError)
   })
 
@@ -266,7 +266,39 @@ describe('plugin-commands-audit', () => {
           },
         },
       },
-      virtualStoreDirMaxLength: 120,
+      virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
+    })
+
+    expect(exitCode).toBe(1)
+    expect(stripAnsi(output)).toMatchSnapshot()
+  })
+
+  test('audit: CVEs in ignoreGhsas do not show up', async () => {
+    const tmp = f.prepare('has-vulnerabilities')
+
+    nock(registries.default)
+      .post('/-/npm/v1/security/audits')
+      .reply(200, responses.ALL_VULN_RESP)
+
+    const { exitCode, output } = await audit.handler({
+      auditLevel: 'moderate',
+      dir: tmp,
+      userConfig: {},
+      rawConfig,
+      registries,
+      rootProjectManifest: {
+        pnpm: {
+          auditConfig: {
+            ignoreGhsas: [
+              'GHSA-42xw-2xvc-qx8m',
+              'GHSA-4w2v-q235-vp99',
+              'GHSA-cph5-m8f7-6c5x',
+              'GHSA-vh95-rmgr-6w4m',
+            ],
+          },
+        },
+      },
+      virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
     })
 
     expect(exitCode).toBe(1)
@@ -299,7 +331,7 @@ describe('plugin-commands-audit', () => {
           },
         },
       },
-      virtualStoreDirMaxLength: 120,
+      virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
     })
 
     expect(exitCode).toBe(1)

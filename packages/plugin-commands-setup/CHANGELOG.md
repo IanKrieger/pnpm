@@ -1,5 +1,30 @@
 # @pnpm/plugin-commands-setup
 
+## 5.1.13
+
+### Patch Changes
+
+- @pnpm/cli-utils@4.0.7
+
+## 5.1.12
+
+### Patch Changes
+
+- c9ea43c: The pnpx command should work correctly on Windows, when pnpm is installed via the standalone installation script [#8608](https://github.com/pnpm/pnpm/pull/8608).
+
+## 5.1.11
+
+### Patch Changes
+
+- @pnpm/cli-utils@4.0.6
+
+## 5.1.10
+
+### Patch Changes
+
+- @pnpm/cli-meta@6.2.2
+- @pnpm/cli-utils@4.0.5
+
 ## 5.1.9
 
 ### Patch Changes

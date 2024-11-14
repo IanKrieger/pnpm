@@ -56,7 +56,7 @@ export const DEFAULT_OPTS = {
     cpu: ['current'],
     libc: ['current'],
   },
-  virtualStoreDirMaxLength: 120,
+  virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
 }
 
 export const DLX_DEFAULT_OPTS = {
@@ -87,6 +87,7 @@ export const DLX_DEFAULT_OPTS = {
   rootProjectManifestDir: '',
   sort: true,
   storeDir: path.join(tmp, 'store'),
+  symlink: true,
   userConfig: {},
   workspaceConcurrency: 1,
   supportedArchitectures: {
@@ -94,5 +95,5 @@ export const DLX_DEFAULT_OPTS = {
     cpu: ['current'],
     libc: ['current'],
   },
-  virtualStoreDirMaxLength: 120,
+  virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
 }

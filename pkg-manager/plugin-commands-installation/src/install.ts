@@ -271,6 +271,7 @@ export type InstallCommandOptions = Pick<Config,
 | 'lockfileDir'
 | 'lockfileOnly'
 | 'modulesDir'
+| 'nodeLinker'
 | 'pnpmfile'
 | 'preferFrozenLockfile'
 | 'production'
@@ -307,6 +308,7 @@ export type InstallCommandOptions = Pick<Config,
     original: string[]
   }
   fixLockfile?: boolean
+  frozenLockfileIfExists?: boolean
   useBetaCli?: boolean
   pruneDirectDependencies?: boolean
   pruneStore?: boolean
@@ -316,7 +318,7 @@ export type InstallCommandOptions = Pick<Config,
   workspace?: boolean
   includeOnlyPackageFiles?: boolean
   confirmModulesPurge?: boolean
-} & Partial<Pick<Config, 'modulesCacheMaxAge' | 'pnpmHomeDir' | 'preferWorkspacePackages'>>
+} & Partial<Pick<Config, 'modulesCacheMaxAge' | 'pnpmHomeDir' | 'preferWorkspacePackages' | 'useLockfile'>>
 
 export async function handler (opts: InstallCommandOptions): Promise<void> {
   const include = {
@@ -324,14 +326,20 @@ export async function handler (opts: InstallCommandOptions): Promise<void> {
     devDependencies: opts.dev !== false,
     optionalDependencies: opts.optional !== false,
   }
+  // npm registry's abbreviated metadata currently does not contain libc
+  // see <https://github.com/pnpm/pnpm/issues/7362#issuecomment-1971964689>
+  const fetchFullMetadata: true | undefined = opts.rootProjectManifest?.pnpm?.supportedArchitectures?.libc && true
   const installDepsOptions: InstallDepsOptions = {
     ...opts,
-    frozenLockfileIfExists: isCI && !opts.lockfileOnly &&
+    frozenLockfileIfExists: opts.frozenLockfileIfExists ?? (
+      isCI && !opts.lockfileOnly &&
       typeof opts.rawLocalConfig['frozen-lockfile'] === 'undefined' &&
-      typeof opts.rawLocalConfig['prefer-frozen-lockfile'] === 'undefined',
+      typeof opts.rawLocalConfig['prefer-frozen-lockfile'] === 'undefined'
+    ),
     include,
     includeDirect: include,
     prepareExecutionEnv: prepareExecutionEnv.bind(null, opts),
+    fetchFullMetadata,
   }
   if (opts.resolutionOnly) {
     installDepsOptions.lockfileOnly = true

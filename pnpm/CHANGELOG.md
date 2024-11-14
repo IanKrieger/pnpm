@@ -1,5 +1,139 @@
 # pnpm
 
+## 10.0.0-alpha.0
+
+### Major Changes
+
+- The `pnpm link` command adds overrides to the root `package.json`. In a workspace the override is added to the root of the workspace, so it links the dependency to all projects in a workspace.
+
+  To link a package globally, just run `pnpm link` from the package's directory. Previously, the command `pnpm link -g` was required to link a package globally.
+
+  Related PR: [#8653](https://github.com/pnpm/pnpm/pull/8653).
+
+- Use sha256 for hashing long paths inside `node_modules/.pnpm`.
+- Using SHA256 instead of md5 for hashing long peer dependency hashes in the lockfile. Should not affect a lot of users as the hashing is used for really long keys in the lockfile.
+- pnpm will now manage it's own versions according to the `packageManager` filed of `package.json`. To disable this, set `manage-package-manager-versions` to `false`.
+- `pnpm test` should pass all the params after the `test` keyword to the underlying script. This is similar to how `pnpm run test` works [#8619](https://github.com/pnpm/pnpm/pull/8619).
+- Changed the hash stored in the `packageExtensionsChecksum` field of `pnpm-lock.yaml` to SHA256.
+- Use an SHA256 hash for the side effects cache keys.
+- Do not hoist to the root of `node_modules` packages that contain the word `eslint` or `prettier` in their name. Changed the default value of the `public-hoist-pattern` setting [#8378](https://github.com/pnpm/pnpm/issues/8378).
+- Update the compatibility database (`@yarnpkg/extensions` to v2.0.3). This might change your lockfile.
+- Use SHA256 for storing the pnpmfile checksum in the lockfile [#8530](https://github.com/pnpm/pnpm/pull/8530).
+- Some registries allow identical content to be published under different package names or versions. To accommodate this, index files in the store are now stored using both the content hash and package identifier.
+
+  This approach ensures that we can:
+
+  1. Validate that the integrity in the lockfile corresponds to the correct package,
+     which might not be the case after a poorly resolved Git conflict.
+  2. Allow the same content to be referenced by different packages or different versions of the same package.
+
+  Related PR: [#8510](https://github.com/pnpm/pnpm/pull/8510)
+  Related issue: [#8204](https://github.com/pnpm/pnpm/issues/8204)
+
+- Allow passing CLI flags and options to `pnpm test` without `--` [#4821](https://github.com/pnpm/pnpm/issues/4821).
+- Changed the structure of the index files in the store to store side effects cache information more efficiently. In the new version, side effects do not list all the files of the package but just the differences [#8636](https://github.com/pnpm/pnpm/pull/8636).
+- The default value of `virtual-store-dir-max-length` on Windows reduced to 60 characters.
+- Escape the `#` character in directory names within the virtual store (`node_modules/.pnpm`) [#8557](https://github.com/pnpm/pnpm/pull/8557).
+- Store version bumped to v10. The new store layout has a different directory called "index" for storing the package content mappings. Previously these files were stored in the same directory where the package contents are (in "files"). The new store has also a new format for storing the mappings for side-effects cache.
+
+### Patch Changes
+
+- Don't validate (and possibly purge) `node_modules` in commands which should not modify it (e.g. `pnpm install --lockfile-only`) [#8657](https://github.com/pnpm/pnpm/pull/8657).
+
+## 9.12.3
+
+### Patch Changes
+
+- Don't purge `node_modules`, when typing "n" in the prompt that asks whether to remove `node_modules` before installation [#8655](https://github.com/pnpm/pnpm/pull/8655).
+- Fix a bug causing pnpm to infinitely spawn itself when `manage-package-manager-versions=true` is set and the `.tools` directory is corrupt.
+- Use `crypto.hash`, when available, for improved performance [#8629](https://github.com/pnpm/pnpm/pull/8629).
+- Fixed a race condition in temporary file creation in the store by including worker thread ID in filename. Previously, multiple worker threads could attempt to use the same temporary file. Temporary files now include both process ID and thread ID for uniqueness [#8703](https://github.com/pnpm/pnpm/pull/8703).
+- All commands should read settings from the `package.json` at the root of the workspace [#8667](https://github.com/pnpm/pnpm/issues/8667).
+- When `manage-package-manager-versions` is set to `true`, errors spawning a self-managed version of `pnpm` will now be shown (instead of being silent).
+- Pass the find command to npm, it is an alias for npm search
+
+## 9.12.2
+
+### Patch Changes
+
+- When checking whether a file in the store has executable permissions, the new approach checks if at least one of the executable bits (owner, group, and others) is set to 1. Previously, a file was incorrectly considered executable only when all the executable bits were set to 1. This fix ensures that files with any executable permission, regardless of the user class, are now correctly identified as executable [#8546](https://github.com/pnpm/pnpm/issues/8546).
+
+## 9.12.1
+
+### Patch Changes
+
+- `pnpm update --latest` should not update the automatically installed peer dependencies [#6657](https://github.com/pnpm/pnpm/issues/6657).
+- `pnpm publish` should be able to publish from a local tarball [#7950](https://github.com/pnpm/pnpm/issues/7950).
+- The pnpx command should work correctly on Windows, when pnpm is installed via the standalone installation script [#8608](https://github.com/pnpm/pnpm/pull/8608).
+- Prevent `EBUSY` errors caused by creating symlinks in parallel `dlx` processes [#8604](https://github.com/pnpm/pnpm/pull/8604).
+- Fix maximum call stack size exceeded error related to circular workspace dependencies [#8599](https://github.com/pnpm/pnpm/pull/8599).
+
+## 9.12.0
+
+### Minor Changes
+
+- Fix peer dependency resolution dead lock [#8570](https://github.com/pnpm/pnpm/issues/8570). This change might change some of the keys in the `snapshots` field inside `pnpm-lock.yaml` but it should happen very rarely.
+- `pnpm outdated` command supports now a `--sort-by=name` option for sorting outdated dependencies by package name [#8523](https://github.com/pnpm/pnpm/pull/8523).
+- Added the ability for `overrides` to remove dependencies by specifying `"-"` as the field value [#8572](https://github.com/pnpm/pnpm/issues/8572). For example, to remove `lodash` from the dependencies, use this configuration in `package.json`:
+
+  ```json
+  {
+    "pnpm": {
+      "overrides": {
+        "lodash": "-"
+      }
+    }
+  }
+  ```
+
+### Patch Changes
+
+- Fixed an issue where `pnpm list --json pkg` showed `"private": false` for a private package [#8519](https://github.com/pnpm/pnpm/issues/8519).
+- Packages with `libc` that differ from `pnpm.supportedArchitectures.libc` are not downloaded [#7362](https://github.com/pnpm/pnpm/issues/7362).
+- Prevent `ENOENT` errors caused by running `store prune` in parallel [#8586](https://github.com/pnpm/pnpm/pull/8586).
+- Add issues alias to `pnpm bugs` [#8596](https://github.com/pnpm/pnpm/pull/8596).
+
+## 9.11.0
+
+### Minor Changes
+
+- Experimental: added `pnpm cache` commands for inspecting the metadata cache [#8512](https://github.com/pnpm/pnpm/pull/8512).
+
+### Patch Changes
+
+- Fix a regression in which `pnpm deploy` with `node-linker=hoisted` produces an empty `node_modules` directory [#6682](https://github.com/pnpm/pnpm/issues/6682).
+- Don't print a warning when linking packages globally [#4761](https://github.com/pnpm/pnpm/issues/4761).
+- `pnpm deploy` should work in workspace with `shared-workspace-lockfile=false` [#8475](https://github.com/pnpm/pnpm/issues/8475).
+
+## 9.10.0
+
+### Minor Changes
+
+- Support for a new CLI flag, `--exclude-peers`, added to the `list` and `why` commands. When `--exclude-peers` is used, peer dependencies are not printed in the results, but dependencies of peer dependencies are still scanned [#8506](https://github.com/pnpm/pnpm/pull/8506).
+- Added a new setting to `package.json` at `pnpm.auditConfig.ignoreGhsas` for ignoring vulnerabilities by their GHSA code [#6838](https://github.com/pnpm/pnpm/issues/6838).
+
+  For instance:
+
+  ```json
+  {
+    "pnpm": {
+      "auditConfig": {
+        "ignoreGhsas": [
+          "GHSA-42xw-2xvc-qx8m",
+          "GHSA-4w2v-q235-vp99",
+          "GHSA-cph5-m8f7-6c5x",
+          "GHSA-vh95-rmgr-6w4m"
+        ]
+      }
+    }
+  }
+  ```
+
+### Patch Changes
+
+- Throw an exception if pnpm switches to the same version of itself.
+- Reduce memory usage during peer dependencies resolution.
+
 ## 9.9.0
 
 ### Minor Changes

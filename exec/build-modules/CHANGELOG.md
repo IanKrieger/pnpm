@@ -1,5 +1,55 @@
 # @pnpm/build-modules
 
+## 14.0.5
+
+### Patch Changes
+
+- Updated dependencies [222d10a]
+  - @pnpm/worker@1.0.13
+  - @pnpm/calc-dep-state@7.0.10
+  - @pnpm/lifecycle@17.1.5
+  - @pnpm/fs.hard-link-dir@4.0.0
+  - @pnpm/patching.apply-patch@3.1.1
+  - @pnpm/link-bins@10.0.11
+
+## 14.0.4
+
+### Patch Changes
+
+- @pnpm/worker@1.0.12
+- @pnpm/lifecycle@17.1.5
+- @pnpm/fs.hard-link-dir@4.0.0
+- @pnpm/patching.apply-patch@3.1.1
+- @pnpm/link-bins@10.0.11
+
+## 14.0.3
+
+### Patch Changes
+
+- @pnpm/calc-dep-state@7.0.9
+- @pnpm/lifecycle@17.1.5
+- @pnpm/patching.apply-patch@3.1.1
+- @pnpm/link-bins@10.0.11
+- @pnpm/read-package-json@9.0.9
+- @pnpm/worker@1.0.11
+- @pnpm/fs.hard-link-dir@4.0.0
+
+## 14.0.2
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/types@12.2.0
+  - @pnpm/lifecycle@17.1.4
+  - @pnpm/calc-dep-state@7.0.8
+  - @pnpm/core-loggers@10.0.7
+  - @pnpm/link-bins@10.0.10
+  - @pnpm/read-package-json@9.0.8
+  - @pnpm/store-controller-types@18.1.6
+  - @pnpm/worker@1.0.10
+  - @pnpm/fs.hard-link-dir@4.0.0
+  - @pnpm/patching.apply-patch@3.1.0
+
 ## 14.0.1
 
 ### Patch Changes

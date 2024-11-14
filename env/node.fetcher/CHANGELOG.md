@@ -1,5 +1,36 @@
 # @pnpm/node.fetcher
 
+## 4.0.16
+
+### Patch Changes
+
+- @pnpm/tarball-fetcher@19.0.16
+- @pnpm/create-cafs-store@7.0.11
+
+## 4.0.15
+
+### Patch Changes
+
+- @pnpm/create-cafs-store@7.0.10
+- @pnpm/tarball-fetcher@19.0.15
+
+## 4.0.14
+
+### Patch Changes
+
+- @pnpm/error@6.0.2
+- @pnpm/tarball-fetcher@19.0.14
+- @pnpm/create-cafs-store@7.0.9
+
+## 4.0.13
+
+### Patch Changes
+
+- @pnpm/fetcher-base@16.0.7
+- @pnpm/tarball-fetcher@19.0.13
+- @pnpm/create-cafs-store@7.0.9
+- @pnpm/pick-fetcher@3.0.0
+
 ## 4.0.12
 
 ### Patch Changes

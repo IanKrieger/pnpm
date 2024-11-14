@@ -86,7 +86,7 @@ test('exit code of child process is preserved', async () => {
   expect(result.status).toBe(87)
 })
 
-test('test -r: pass the args to the command that is specified in the build script of a package.json manifest', async () => {
+test('recursive test: pass the args to the command that is specified in the build script of a package.json manifest', async () => {
   preparePackages([{
     name: 'project',
     scripts: {
@@ -94,7 +94,7 @@ test('test -r: pass the args to the command that is specified in the build scrip
     },
   }])
 
-  const result = execPnpmSync(['test', '-r', 'arg', '--', '--flag=true'])
+  const result = execPnpmSync(['-r', 'test', 'arg', '--flag=true'])
 
   expect((result.stdout as Buffer).toString('utf8')).toMatch(/ts-node test "arg" "--flag=true"/)
 })
@@ -236,7 +236,7 @@ test('--reporter-hide-prefix should hide workspace prefix', async () => {
 test('recursive run when some packages define different node versions', async () => {
   preparePackages([
     {
-      name: 'node-version-undefined',
+      name: 'node-version-unset',
       scripts: {
         'print-node-version': 'node -v',
       },
@@ -271,7 +271,7 @@ test('recursive run when some packages define different node versions', async ()
       .toString()
       .trim()
       .split('\n')
-      .filter(x => /v[0-9]+\.[0-9]+\.[0-9]+/.test(x))
+      .filter(x => /print-node-version.*v[0-9]+\.[0-9]+\.[0-9]+/.test(x))
       .sort()
 
   expect(
@@ -279,7 +279,7 @@ test('recursive run when some packages define different node versions', async ()
   ).toStrictEqual([
     'node-version-18 print-node-version: v18.0.0',
     'node-version-20 print-node-version: v20.0.0',
-    `node-version-undefined print-node-version: ${process.version}`,
+    `node-version-unset print-node-version: ${process.version}`,
   ])
 
   expect(
@@ -287,6 +287,6 @@ test('recursive run when some packages define different node versions', async ()
   ).toStrictEqual([
     'node-version-18 print-node-version: v18.0.0',
     'node-version-20 print-node-version: v20.0.0',
-    'node-version-undefined print-node-version: v19.0.0',
+    'node-version-unset print-node-version: v19.0.0',
   ])
 })

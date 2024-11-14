@@ -51,5 +51,10 @@ export const DEFAULT_OPTS = {
   useRunningStoreServer: false,
   useStoreServer: false,
   workspaceConcurrency: 4,
-  virtualStoreDirMaxLength: 120,
+  virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
+}
+
+export const DEFAULT_OUTDATED_OPTS = {
+  ...DEFAULT_OPTS,
+  sortBy: 'name' as const,
 }

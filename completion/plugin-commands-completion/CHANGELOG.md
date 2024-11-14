@@ -1,5 +1,32 @@
 # @pnpm/plugin-commands-completion
 
+## 1.0.23
+
+### Patch Changes
+
+- Updated dependencies [f066efc]
+  - @pnpm/parse-cli-args@8.0.3
+  - @pnpm/cli-utils@4.0.7
+  - @pnpm/workspace.find-packages@4.0.12
+
+## 1.0.22
+
+### Patch Changes
+
+- @pnpm/error@6.0.2
+- @pnpm/workspace.read-manifest@2.2.1
+- @pnpm/cli-utils@4.0.6
+- @pnpm/parse-cli-args@8.0.2
+- @pnpm/find-workspace-dir@7.0.2
+- @pnpm/workspace.find-packages@4.0.11
+
+## 1.0.21
+
+### Patch Changes
+
+- @pnpm/cli-utils@4.0.5
+- @pnpm/workspace.find-packages@4.0.10
+
 ## 1.0.20
 
 ### Patch Changes

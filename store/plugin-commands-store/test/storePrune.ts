@@ -1,15 +1,14 @@
 import fs from 'fs'
 import path from 'path'
 import { assertStore } from '@pnpm/assert-store'
+import { STORE_VERSION } from '@pnpm/constants'
 import { dlx } from '@pnpm/plugin-commands-script-runners'
 import { store } from '@pnpm/plugin-commands-store'
 import { prepare, prepareEmpty } from '@pnpm/prepare'
 import { REGISTRY_MOCK_PORT } from '@pnpm/registry-mock'
 import { sync as rimraf } from '@zkochan/rimraf'
 import execa from 'execa'
-import ssri from 'ssri'
 
-const STORE_VERSION = 'v3'
 const REGISTRY = `http://localhost:${REGISTRY_MOCK_PORT}/`
 const pnpmBin = path.join(__dirname, '../../../pnpm/bin/pnpm.cjs')
 
@@ -51,7 +50,7 @@ test('remove unreferenced packages', async () => {
     storeDir,
     userConfig: {},
     dlxCacheMaxAge: Infinity,
-    virtualStoreDirMaxLength: 120,
+    virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
   }, ['prune'])
 
   expect(reporter).toHaveBeenCalledWith(
@@ -76,7 +75,7 @@ test('remove unreferenced packages', async () => {
     storeDir,
     userConfig: {},
     dlxCacheMaxAge: Infinity,
-    virtualStoreDirMaxLength: 120,
+    virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
   }, ['prune'])
 
   expect(reporter).not.toHaveBeenCalledWith(
@@ -85,7 +84,7 @@ test('remove unreferenced packages', async () => {
       message: 'Removed 1 package',
     })
   )
-  expect(fs.readdirSync(cacheDir).length).toEqual(0)
+  expect(fs.readdirSync(cacheDir)).toStrictEqual([])
 })
 
 test.skip('remove packages that are used by project that no longer exist', async () => {
@@ -98,7 +97,7 @@ test.skip('remove packages that are used by project that no longer exist', async
 
   rimraf('node_modules')
 
-  cafsHas(ssri.fromHex('f0d86377aa15a64c34961f38ac2a9be2b40a1187', 'sha1').toString())
+  cafsHas('is-negative', '2.1.0')
 
   const reporter = jest.fn()
   await store.handler({
@@ -113,7 +112,7 @@ test.skip('remove packages that are used by project that no longer exist', async
     storeDir,
     userConfig: {},
     dlxCacheMaxAge: Infinity,
-    virtualStoreDirMaxLength: 120,
+    virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
   }, ['prune'])
 
   expect(reporter).toHaveBeenCalledWith(
@@ -123,7 +122,7 @@ test.skip('remove packages that are used by project that no longer exist', async
     })
   )
 
-  cafsHasNot(ssri.fromHex('f0d86377aa15a64c34961f38ac2a9be2b40a1187', 'sha1').toString())
+  cafsHasNot('is-negative', '2.1.0')
 })
 
 test('keep dependencies used by others', async () => {
@@ -153,7 +152,7 @@ test('keep dependencies used by others', async () => {
     storeDir,
     userConfig: {},
     dlxCacheMaxAge: Infinity,
-    virtualStoreDirMaxLength: 120,
+    virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
   }, ['prune'])
 
   project.storeHasNot('camelcase-keys', '3.0.0')
@@ -179,7 +178,7 @@ test('keep dependency used by package', async () => {
     storeDir,
     userConfig: {},
     dlxCacheMaxAge: Infinity,
-    virtualStoreDirMaxLength: 120,
+    virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
   }, ['prune'])
 
   project.storeHas('is-positive', '3.1.0')
@@ -203,7 +202,7 @@ test('prune will skip scanning non-directory in storeDir', async () => {
     storeDir,
     userConfig: {},
     dlxCacheMaxAge: Infinity,
-    virtualStoreDirMaxLength: 120,
+    virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
   }, ['prune'])
 })
 
@@ -215,7 +214,7 @@ test('prune does not fail if the store contains an unexpected directory', async 
   await execa('node', [pnpmBin, 'add', 'is-negative@2.1.0', '--store-dir', storeDir, '--registry', REGISTRY])
 
   project.storeHas('is-negative', '2.1.0')
-  const alienDir = path.join(storeDir, 'v3/files/44/directory')
+  const alienDir = path.join(storeDir, STORE_VERSION, 'files/44/directory')
   fs.mkdirSync(alienDir)
 
   const reporter = jest.fn()
@@ -231,7 +230,7 @@ test('prune does not fail if the store contains an unexpected directory', async 
     storeDir,
     userConfig: {},
     dlxCacheMaxAge: Infinity,
-    virtualStoreDirMaxLength: 120,
+    virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
   }, ['prune'])
 
   expect(reporter).toHaveBeenCalledWith(
@@ -253,7 +252,7 @@ test('prune removes alien files from the store if the --force flag is used', asy
   await execa('node', [pnpmBin, 'add', 'is-negative@2.1.0', '--store-dir', storeDir, '--registry', REGISTRY])
 
   project.storeHas('is-negative', '2.1.0')
-  const alienDir = path.join(storeDir, 'v3/files/44/directory')
+  const alienDir = path.join(storeDir, STORE_VERSION, 'files/44/directory')
   fs.mkdirSync(alienDir)
 
   const reporter = jest.fn()
@@ -270,7 +269,7 @@ test('prune removes alien files from the store if the --force flag is used', asy
     userConfig: {},
     force: true,
     dlxCacheMaxAge: Infinity,
-    virtualStoreDirMaxLength: 120,
+    virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
   }, ['prune'])
   expect(reporter).toHaveBeenCalledWith(
     expect.objectContaining({
@@ -279,6 +278,67 @@ test('prune removes alien files from the store if the --force flag is used', asy
     })
   )
   expect(fs.existsSync(alienDir)).toBeFalsy()
+})
+
+describe('prune when store directory is not properly configured', () => {
+  test('prune will not fail if the store directory does not exist (ENOENT)', async () => {
+    prepareEmpty()
+    const nonExistentStoreDir = path.resolve('store')
+    const reporter = jest.fn()
+
+    await expect(
+      store.handler({
+        cacheDir: path.resolve('cache'),
+        dir: process.cwd(),
+        pnpmHomeDir: '',
+        rawConfig: {
+          registry: REGISTRY,
+        },
+        registries: { default: REGISTRY },
+        reporter,
+        storeDir: nonExistentStoreDir,
+        userConfig: {},
+        dlxCacheMaxAge: Infinity,
+        virtualStoreDirMaxLength: 120,
+      }, ['prune'])
+    ).resolves.toBeUndefined()
+
+    expect(reporter).toHaveBeenCalledWith(
+      expect.objectContaining({
+        level: 'info',
+        message: 'Removed 0 files',
+      })
+    )
+
+    expect(reporter).toHaveBeenCalledWith(
+      expect.objectContaining({
+        level: 'info',
+        message: 'Removed 0 packages',
+      })
+    )
+  })
+
+  test('prune will fail for other file-related errors (i.e.; not ENOENT)', async () => {
+    prepareEmpty()
+    const fileInPlaceOfStoreDir = path.resolve('store')
+    fs.writeFileSync(fileInPlaceOfStoreDir, '')
+    await expect(
+      store.handler({
+        cacheDir: path.resolve('cache'),
+        dir: process.cwd(),
+        pnpmHomeDir: '',
+        rawConfig: {
+          registry: REGISTRY,
+        },
+        registries: { default: REGISTRY },
+        reporter: jest.fn(),
+        storeDir: fileInPlaceOfStoreDir,
+        userConfig: {},
+        dlxCacheMaxAge: Infinity,
+        virtualStoreDirMaxLength: 120,
+      }, ['prune'])
+    ).rejects.toThrow(/^ENOTDIR/)
+  })
 })
 
 function createSampleDlxCacheLinkTarget (dirPath: string): void {
@@ -313,8 +373,8 @@ test('prune removes cache directories that outlives dlx-cache-max-age', async ()
   const cacheDir = path.resolve('cache')
   const storeDir = path.resolve('store')
 
-  fs.mkdirSync(path.join(storeDir, 'v3', 'files'), { recursive: true })
-  fs.mkdirSync(path.join(storeDir, 'v3', 'tmp'), { recursive: true })
+  fs.mkdirSync(path.join(storeDir, STORE_VERSION, 'files'), { recursive: true })
+  fs.mkdirSync(path.join(storeDir, STORE_VERSION, 'tmp'), { recursive: true })
 
   const now = new Date()
 
@@ -336,7 +396,7 @@ test('prune removes cache directories that outlives dlx-cache-max-age', async ()
     storeDir,
     userConfig: {},
     dlxCacheMaxAge: 7,
-    virtualStoreDirMaxLength: 120,
+    virtualStoreDirMaxLength: process.platform === 'win32' ? 60 : 120,
   }, ['prune'])
 
   expect(

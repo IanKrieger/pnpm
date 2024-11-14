@@ -1,12 +1,10 @@
-import path from 'path'
-
 import { type Config } from '@pnpm/config'
 import { createResolver } from '@pnpm/client'
 import { type TarballResolution } from '@pnpm/lockfile.types'
 
 import { PnpmError } from '@pnpm/error'
 import { getStorePath } from '@pnpm/store-path'
-import { getFilePathInCafs, type PackageFilesIndex } from '@pnpm/store.cafs'
+import { getIndexFilePathInCafs, type PackageFilesIndex } from '@pnpm/store.cafs'
 import { pickRegistryForPackage } from '@pnpm/pick-registry-for-package'
 import { parseWantedDependency } from '@pnpm/parse-wanted-dependency'
 import sortKeys from 'sort-keys'
@@ -68,7 +66,6 @@ export async function handler (opts: CatIndexCommandOptions, params: string[]): 
     storePath: opts.storeDir,
     pnpmHomeDir: opts.pnpmHomeDir,
   })
-  const cafsDir = path.join(storeDir, 'files')
   const { resolve } = createResolver({
     ...opts,
     authConfig: opts.rawConfig,
@@ -83,10 +80,10 @@ export async function handler (opts: CatIndexCommandOptions, params: string[]): 
     }
   )
 
-  const filesIndexFile = getFilePathInCafs(
-    cafsDir,
+  const filesIndexFile = getIndexFilePathInCafs(
+    storeDir,
     (pkgSnapshot.resolution as TarballResolution).integrity!.toString(),
-    'index'
+    `${alias}@${pref}`
   )
   try {
     const pkgFilesIndex = await loadJsonFile<PackageFilesIndex>(filesIndexFile)

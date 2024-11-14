@@ -1,5 +1,41 @@
 # @pnpm/modules-cleaner
 
+## 15.1.16
+
+### Patch Changes
+
+- @pnpm/dependency-path@5.1.7
+- @pnpm/lockfile.filtering@1.0.7
+- @pnpm/lockfile.utils@1.0.4
+
+## 15.1.15
+
+### Patch Changes
+
+- Updated dependencies [17b5088]
+  - @pnpm/lockfile.filtering@1.0.6
+
+## 15.1.14
+
+### Patch Changes
+
+- @pnpm/lockfile.filtering@1.0.5
+- @pnpm/remove-bins@6.0.9
+
+## 15.1.13
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/types@12.2.0
+  - @pnpm/lockfile.filtering@1.0.4
+  - @pnpm/lockfile.types@1.0.3
+  - @pnpm/lockfile.utils@1.0.3
+  - @pnpm/core-loggers@10.0.7
+  - @pnpm/dependency-path@5.1.6
+  - @pnpm/remove-bins@6.0.8
+  - @pnpm/store-controller-types@18.1.6
+
 ## 15.1.12
 
 ### Patch Changes

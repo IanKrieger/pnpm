@@ -2,9 +2,8 @@ import { createReadStream, promises as fs } from 'fs'
 import os from 'os'
 import path from 'path'
 import {
-  type FileType,
   getFilePathByModeInCafs as _getFilePathByModeInCafs,
-  getFilePathInCafs as _getFilePathInCafs,
+  getIndexFilePathInCafs as _getIndexFilePathInCafs,
   type PackageFilesIndex,
 } from '@pnpm/store.cafs'
 import { fetchingProgressLogger, progressLogger } from '@pnpm/core-loggers'
@@ -108,15 +107,14 @@ export function createPackageRequester (
     concurrency: networkConcurrency,
   })
 
-  const cafsDir = path.join(opts.storeDir, 'files')
-  const getFilePathInCafs = _getFilePathInCafs.bind(null, cafsDir)
+  const getIndexFilePathInCafs = _getIndexFilePathInCafs.bind(null, opts.storeDir)
   const fetch = fetcher.bind(null, opts.fetchers, opts.cafs)
   const fetchPackageToStore = fetchToStore.bind(null, {
-    readPkgFromCafs: _readPkgFromCafs.bind(null, cafsDir, opts.verifyStoreIntegrity),
+    readPkgFromCafs: _readPkgFromCafs.bind(null, opts.storeDir, opts.verifyStoreIntegrity),
     fetch,
     fetchingLocker: new Map(),
-    getFilePathByModeInCafs: _getFilePathByModeInCafs.bind(null, cafsDir),
-    getFilePathInCafs,
+    getFilePathByModeInCafs: _getFilePathByModeInCafs.bind(null, opts.storeDir),
+    getIndexFilePathInCafs,
     requestsQueue: Object.assign(requestsQueue, {
       counter: 0,
       concurrency: networkConcurrency,
@@ -139,7 +137,7 @@ export function createPackageRequester (
   return Object.assign(requestPackage, {
     fetchPackageToStore,
     getFilesIndexFilePath: getFilesIndexFilePath.bind(null, {
-      getFilePathInCafs,
+      getIndexFilePathInCafs,
       storeDir: opts.storeDir,
       virtualStoreDirMaxLength: opts.virtualStoreDirMaxLength,
     }),
@@ -309,7 +307,7 @@ interface FetchLock {
 
 function getFilesIndexFilePath (
   ctx: {
-    getFilePathInCafs: (integrity: string, fileType: FileType) => string
+    getIndexFilePathInCafs: (integrity: string, pkgId: string) => string
     storeDir: string
     virtualStoreDirMaxLength: number
   },
@@ -318,7 +316,7 @@ function getFilesIndexFilePath (
   const targetRelative = depPathToFilename(opts.pkg.id, ctx.virtualStoreDirMaxLength)
   const target = path.join(ctx.storeDir, targetRelative)
   const filesIndexFile = (opts.pkg.resolution as TarballResolution).integrity
-    ? ctx.getFilePathInCafs((opts.pkg.resolution as TarballResolution).integrity!, 'index')
+    ? ctx.getIndexFilePathInCafs((opts.pkg.resolution as TarballResolution).integrity!, opts.pkg.id)
     : path.join(target, opts.ignoreScripts ? 'integrity-not-built.json' : 'integrity.json')
   return { filesIndexFile, target }
 }
@@ -335,7 +333,7 @@ function fetchToStore (
       opts: FetchOptions
     ) => Promise<FetchResult>
     fetchingLocker: Map<string, FetchLock>
-    getFilePathInCafs: (integrity: string, fileType: FileType) => string
+    getIndexFilePathInCafs: (integrity: string, pkgId: string) => string
     getFilePathByModeInCafs: (integrity: string, mode: number) => string
     requestsQueue: {
       add: <T>(fn: () => Promise<T>, opts: { priority: number }) => Promise<T>

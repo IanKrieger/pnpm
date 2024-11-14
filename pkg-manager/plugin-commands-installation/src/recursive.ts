@@ -29,7 +29,6 @@ import {
   type InstallOptions,
   type MutatedProject,
   mutateModules,
-  type MutateModulesResult,
   type ProjectOptions,
   type UpdateMatchingFunction,
   type WorkspacePackages,
@@ -103,7 +102,7 @@ export async function recursive (
   allProjects: Project[],
   params: string[],
   opts: RecursiveOptions,
-  cmdFullName: 'install' | 'add' | 'remove' | 'unlink' | 'update' | 'import'
+  cmdFullName: 'install' | 'add' | 'remove' | 'update' | 'import'
 ): Promise<boolean | string> {
   if (allProjects.length === 0) {
     // It might make sense to throw an exception in this case
@@ -121,9 +120,7 @@ export async function recursive (
 
   const store = await createOrConnectStoreController(opts)
 
-  const workspacePackages: WorkspacePackages = cmdFullName !== 'unlink'
-    ? arrayOfWorkspacePackagesToMap(allProjects) as WorkspacePackages
-    : new Map()
+  const workspacePackages: WorkspacePackages = arrayOfWorkspacePackagesToMap(allProjects) as WorkspacePackages
   const targetDependenciesField = getSaveType(opts)
   const rootManifestDir = (opts.lockfileDir ?? opts.dir) as ProjectRootDir
   const installOpts = Object.assign(opts, {
@@ -313,9 +310,6 @@ export async function recursive (
 
         let action!: any // eslint-disable-line @typescript-eslint/no-explicit-any
         switch (cmdFullName) {
-        case 'unlink':
-          action = (currentInput.length === 0 ? unlink : unlinkPkgs.bind(null, currentInput))
-          break
         case 'remove':
           action = async (manifest: PackageManifest, opts: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
             const mutationResult = await mutateModules([
@@ -342,6 +336,7 @@ export async function recursive (
             ...installOpts,
             ...localConfig,
             ...getOptionsFromRootManifest(rootDir, manifest),
+            ...opts.allProjectsGraph[rootDir]?.package,
             bin: path.join(rootDir, 'node_modules', '.bin'),
             dir: rootDir,
             hooks,
@@ -384,8 +379,7 @@ export async function recursive (
     !opts.lockfileOnly && !opts.ignoreScripts && (
       cmdFullName === 'add' ||
       cmdFullName === 'install' ||
-      cmdFullName === 'update' ||
-      cmdFullName === 'unlink'
+      cmdFullName === 'update'
     )
   ) {
     await rebuild.handler({
@@ -403,31 +397,6 @@ export async function recursive (
   }
 
   return true
-}
-
-async function unlink (manifest: ProjectManifest, opts: any): Promise<MutateModulesResult> { // eslint-disable-line @typescript-eslint/no-explicit-any
-  return mutateModules(
-    [
-      {
-        mutation: 'unlink',
-        rootDir: opts.dir,
-      },
-    ],
-    opts
-  )
-}
-
-async function unlinkPkgs (dependencyNames: string[], manifest: ProjectManifest, opts: any): Promise<MutateModulesResult> { // eslint-disable-line @typescript-eslint/no-explicit-any
-  return mutateModules(
-    [
-      {
-        dependencyNames,
-        mutation: 'unlinkSome',
-        rootDir: opts.dir,
-      },
-    ],
-    opts
-  )
 }
 
 function calculateRepositoryRoot (
@@ -519,10 +488,11 @@ function getAllProjects (manifestsByPath: ManifestsByPath, allProjectsGraph: Pro
 interface ManifestsByPath { [dir: string]: Omit<Project, 'rootDir' | 'rootDirRealPath'> }
 
 function getManifestsByPath (projects: Project[]): Record<ProjectRootDir, Omit<Project, 'rootDir' | 'rootDirRealPath'>> {
-  return projects.reduce((manifestsByPath, { rootDir, manifest, writeProjectManifest }) => {
+  const manifestsByPath: Record<string, Omit<Project, 'rootDir' | 'rootDirRealPath'>> = {}
+  for (const { rootDir, manifest, writeProjectManifest } of projects) {
     manifestsByPath[rootDir] = { manifest, writeProjectManifest }
-    return manifestsByPath
-  }, {} as Record<string, Omit<Project, 'rootDir' | 'rootDirRealPath'>>)
+  }
+  return manifestsByPath
 }
 
 function getImporters (opts: Pick<RecursiveOptions, 'selectedProjectsGraph' | 'ignoredPackages'>): Array<{ rootDir: ProjectRootDir, rootDirRealPath: ProjectRootDirRealPath }> {

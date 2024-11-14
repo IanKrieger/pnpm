@@ -1,7 +1,7 @@
 {
   "name": "@pnpm/fs.indexed-pkg-importer",
   "description": "Replicates indexed directories using hard links, copies, or cloning",
-  "version": "6.0.8",
+  "version": "6.0.9",
   "bugs": {
     "url": "https://github.com/pnpm/pnpm/issues"
   },
@@ -38,7 +38,7 @@
   },
   "homepage": "https://github.com/pnpm/pnpm/blob/main/fs/indexed-pkg-importer#readme",
   "keywords": [
-    "pnpm9",
+    "pnpm10",
     "store",
     "storage",
     "global store",
@@ -65,5 +65,8 @@
   "funding": "https://opencollective.com/pnpm",
   "exports": {
     ".": "./lib/index.js"
+  },
+  "jest": {
+    "preset": "@pnpm/jest-config"
   }
 }

@@ -1,5 +1,86 @@
 # @pnpm/plugin-commands-script-runners
 
+## 12.0.10
+
+### Patch Changes
+
+- Updated dependencies [d04f7f2]
+- Updated dependencies [6014522]
+  - @pnpm/plugin-commands-env@5.1.11
+  - @pnpm/plugin-commands-installation@17.2.7
+  - @pnpm/crypto.base32-hash@3.0.1
+  - @pnpm/cli-utils@4.0.7
+  - @pnpm/config@21.8.5
+  - @pnpm/lifecycle@17.1.5
+
+## 12.0.9
+
+### Patch Changes
+
+- @pnpm/plugin-commands-installation@17.2.6
+- @pnpm/plugin-commands-env@5.1.10
+- @pnpm/cli-utils@4.0.6
+- @pnpm/config@21.8.4
+- @pnpm/lifecycle@17.1.5
+- @pnpm/crypto.base32-hash@3.0.0
+
+## 12.0.8
+
+### Patch Changes
+
+- fb77d4e: Prevent `EBUSY` errors caused by calling `symlinkDir` in parallel `dlx` processes.
+  - @pnpm/plugin-commands-installation@17.2.5
+
+## 12.0.7
+
+### Patch Changes
+
+- Updated dependencies [83681da]
+  - @pnpm/plugin-commands-installation@17.2.4
+  - @pnpm/config@21.8.4
+  - @pnpm/error@6.0.2
+  - @pnpm/cli-utils@4.0.6
+  - @pnpm/plugin-commands-env@5.1.9
+  - @pnpm/lifecycle@17.1.5
+  - @pnpm/read-package-json@9.0.9
+  - @pnpm/read-project-manifest@6.0.9
+  - @pnpm/store-path@9.0.2
+  - @pnpm/crypto.base32-hash@3.0.0
+
+## 12.0.6
+
+### Patch Changes
+
+- Updated dependencies [ad1fd64]
+- Updated dependencies [eeb76cd]
+  - @pnpm/plugin-commands-installation@17.2.3
+
+## 12.0.5
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/types@12.2.0
+  - @pnpm/cli-utils@4.0.5
+  - @pnpm/config@21.8.3
+  - @pnpm/plugin-commands-env@5.1.8
+  - @pnpm/lifecycle@17.1.4
+  - @pnpm/core-loggers@10.0.7
+  - @pnpm/package-bins@9.0.7
+  - @pnpm/plugin-commands-installation@17.2.2
+  - @pnpm/read-package-json@9.0.8
+  - @pnpm/read-project-manifest@6.0.8
+  - @pnpm/sort-packages@6.0.8
+  - @pnpm/crypto.base32-hash@3.0.0
+
+## 12.0.4
+
+### Patch Changes
+
+- Updated dependencies [757e6be]
+  - @pnpm/env.path@1.1.0
+  - @pnpm/plugin-commands-installation@17.2.1
+
 ## 12.0.3
 
 ### Patch Changes

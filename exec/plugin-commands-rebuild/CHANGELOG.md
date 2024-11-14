@@ -1,5 +1,88 @@
 # @pnpm/plugin-commands-rebuild
 
+## 12.1.2
+
+### Patch Changes
+
+- Updated dependencies [f9a095c]
+- Updated dependencies [222d10a]
+- Updated dependencies [a1f4df2]
+  - @pnpm/get-context@12.0.7
+  - @pnpm/worker@1.0.13
+  - @pnpm/store.cafs@4.0.2
+  - @pnpm/dependency-path@5.1.7
+  - @pnpm/store-connection-manager@8.4.2
+  - @pnpm/cli-utils@4.0.7
+  - @pnpm/config@21.8.5
+  - @pnpm/lockfile.utils@1.0.4
+  - @pnpm/lockfile.walker@1.0.4
+  - @pnpm/calc-dep-state@7.0.10
+  - @pnpm/workspace.find-packages@4.0.12
+  - @pnpm/lifecycle@17.1.5
+  - @pnpm/link-bins@10.0.11
+
+## 12.1.1
+
+### Patch Changes
+
+- Updated dependencies [db7ff76]
+  - @pnpm/store.cafs@4.0.1
+  - @pnpm/worker@1.0.12
+  - @pnpm/store-connection-manager@8.4.1
+  - @pnpm/cli-utils@4.0.6
+  - @pnpm/config@21.8.4
+  - @pnpm/lifecycle@17.1.5
+  - @pnpm/link-bins@10.0.11
+
+## 12.1.0
+
+### Minor Changes
+
+- 83681da: Packages with `libc` that differ from `pnpm.supportedArchitectures.libc` are not downloaded [#7362](https://github.com/pnpm/pnpm/issues/7362).
+
+### Patch Changes
+
+- Updated dependencies [83681da]
+- Updated dependencies [83681da]
+  - @pnpm/store-connection-manager@8.4.0
+  - @pnpm/constants@9.0.0
+  - @pnpm/config@21.8.4
+  - @pnpm/calc-dep-state@7.0.9
+  - @pnpm/error@6.0.2
+  - @pnpm/get-context@12.0.6
+  - @pnpm/cli-utils@4.0.6
+  - @pnpm/lifecycle@17.1.5
+  - @pnpm/link-bins@10.0.11
+  - @pnpm/worker@1.0.11
+  - @pnpm/workspace.find-packages@4.0.11
+
+## 12.0.10
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+- Updated dependencies [db420ab]
+  - @pnpm/types@12.2.0
+  - @pnpm/store.cafs@4.0.0
+  - @pnpm/cli-utils@4.0.5
+  - @pnpm/config@21.8.3
+  - @pnpm/normalize-registries@6.0.7
+  - @pnpm/lifecycle@17.1.4
+  - @pnpm/lockfile.types@1.0.3
+  - @pnpm/lockfile.utils@1.0.3
+  - @pnpm/lockfile.walker@1.0.3
+  - @pnpm/calc-dep-state@7.0.8
+  - @pnpm/core-loggers@10.0.7
+  - @pnpm/dependency-path@5.1.6
+  - @pnpm/get-context@12.0.5
+  - @pnpm/link-bins@10.0.10
+  - @pnpm/modules-yaml@13.1.7
+  - @pnpm/store-controller-types@18.1.6
+  - @pnpm/worker@1.0.10
+  - @pnpm/workspace.find-packages@4.0.10
+  - @pnpm/sort-packages@6.0.8
+  - @pnpm/store-connection-manager@8.3.10
+
 ## 12.0.9
 
 ### Patch Changes

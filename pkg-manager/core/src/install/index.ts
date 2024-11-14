@@ -1,4 +1,3 @@
-import crypto from 'crypto'
 import path from 'path'
 import { buildModules, type DepsStateCache, linkBinsOfDependencies } from '@pnpm/build-modules'
 import { createAllowBuildFunction } from '@pnpm/builder.policy'
@@ -14,7 +13,12 @@ import {
   stageLogger,
   summaryLogger,
 } from '@pnpm/core-loggers'
-import { createBase32HashFromFile } from '@pnpm/crypto.base32-hash'
+import { hashObjectNullableWithPrefix } from '@pnpm/crypto.object-hasher'
+import {
+  calcPatchHashes,
+  createOverridesMapFromParsed,
+  getOutdatedLockfileSetting,
+} from '@pnpm/lockfile.settings-checker'
 import { PnpmError } from '@pnpm/error'
 import { getContext, type PnpmContext } from '@pnpm/get-context'
 import { headlessInstall, type InstallationResultStats } from '@pnpm/headless'
@@ -41,9 +45,7 @@ import { getPreferredVersionsFromLockfileAndManifests } from '@pnpm/lockfile.pre
 import { logger, globalInfo, streamParser } from '@pnpm/logger'
 import { getAllDependenciesFromManifest, getAllUniqueSpecs } from '@pnpm/manifest-utils'
 import { writeModulesManifest } from '@pnpm/modules-yaml'
-import { readModulesDir } from '@pnpm/read-modules-dir'
 import { safeReadProjectManifestOnly } from '@pnpm/read-project-manifest'
-import { removeBin } from '@pnpm/remove-bins'
 import {
   getWantedDependencies,
   type DependenciesGraph,
@@ -66,19 +68,13 @@ import {
   type ReadPackageHook,
   type ProjectRootDir,
 } from '@pnpm/types'
-import rimraf from '@zkochan/rimraf'
-import isInnerLink from 'is-inner-link'
 import isSubdir from 'is-subdir'
-import pFilter from 'p-filter'
 import pLimit from 'p-limit'
-import pMapValues from 'p-map-values'
 import mapValues from 'ramda/src/map'
 import clone from 'ramda/src/clone'
-import equals from 'ramda/src/equals'
 import isEmpty from 'ramda/src/isEmpty'
 import pipeWith from 'ramda/src/pipeWith'
 import props from 'ramda/src/props'
-import sortKeys from 'sort-keys'
 import { parseWantedDependencies } from '../parseWantedDependencies'
 import { removeDeps } from '../uninstall/removeDeps'
 import {
@@ -88,6 +84,8 @@ import {
 } from './extendInstallOptions'
 import { linkPackages } from './link'
 import { reportPeerDependencyIssues } from './reportPeerDependencyIssues'
+import { validateModules } from './validateModules'
+import { isCI } from 'ci-info'
 
 class LockfileConfigMismatchError extends PnpmError {
   constructor (outdatedLockfileSettingName: string) {
@@ -132,20 +130,12 @@ export interface UninstallSomeDepsMutation {
   targetDependenciesField?: DependenciesField
 }
 
-export interface UnlinkDepsMutation {
-  mutation: 'unlink'
-}
-
-export interface UnlinkSomeDepsMutation {
-  mutation: 'unlinkSome'
-  dependencyNames: string[]
-}
-
-export type DependenciesMutation = InstallDepsMutation | InstallSomeDepsMutation | UninstallSomeDepsMutation | UnlinkDepsMutation | UnlinkSomeDepsMutation
+export type DependenciesMutation = InstallDepsMutation | InstallSomeDepsMutation | UninstallSomeDepsMutation
 
 type Opts = Omit<InstallOptions, 'allProjects'> & {
   preferredVersions?: PreferredVersions
   pruneDirectDependencies?: boolean
+  binsDir?: string
 } & InstallMutationOptions
 
 export async function install (
@@ -170,6 +160,7 @@ export async function install (
         buildIndex: 0,
         manifest,
         rootDir,
+        binsDir: opts.binsDir,
       }],
     }
   )
@@ -245,14 +236,38 @@ export async function mutateModules (
 
   const installsOnly = allMutationsAreInstalls(projects)
   if (!installsOnly) opts.strictPeerDependencies = false
-  // @ts-expect-error
-  opts['forceNewModules'] = installsOnly
   const rootProjectManifest = opts.allProjects.find(({ rootDir }) => rootDir === opts.lockfileDir)?.manifest ??
     // When running install/update on a subset of projects, the root project might not be included,
     // so reading its manifest explicitly here.
     await safeReadProjectManifestOnly(opts.lockfileDir)
 
-  const ctx = await getContext(opts)
+  let ctx = await getContext(opts)
+
+  if (!opts.lockfileOnly && ctx.modulesFile != null) {
+    const { purged } = await validateModules(ctx.modulesFile, Object.values(ctx.projects), {
+      forceNewModules: installsOnly,
+      include: opts.include,
+      lockfileDir: opts.lockfileDir,
+      modulesDir: opts.modulesDir ?? 'node_modules',
+      registries: opts.registries,
+      storeDir: opts.storeDir,
+      virtualStoreDir: ctx.virtualStoreDir,
+      virtualStoreDirMaxLength: opts.virtualStoreDirMaxLength,
+      confirmModulesPurge: opts.confirmModulesPurge && !isCI,
+
+      forceHoistPattern: opts.forceHoistPattern,
+      hoistPattern: opts.hoistPattern,
+      currentHoistPattern: ctx.currentHoistPattern,
+
+      forcePublicHoistPattern: opts.forcePublicHoistPattern,
+      publicHoistPattern: opts.publicHoistPattern,
+      currentPublicHoistPattern: ctx.currentPublicHoistPattern,
+      global: opts.global,
+    })
+    if (purged) {
+      ctx = await getContext(opts)
+    }
+  }
 
   if (opts.hooks.preResolution) {
     await opts.hooks.preResolution({
@@ -328,7 +343,7 @@ export async function mutateModules (
         }
       )
     }
-    const packageExtensionsChecksum = isEmpty(opts.packageExtensions ?? {}) ? undefined : createObjectChecksum(opts.packageExtensions!)
+    const packageExtensionsChecksum = hashObjectNullableWithPrefix(opts.packageExtensions)
     const pnpmfileChecksum = await opts.hooks.calculatePnpmfileChecksum?.()
     const patchedDependencies = opts.ignorePackageManifest
       ? ctx.wantedLockfile.patchedDependencies
@@ -342,7 +357,7 @@ export async function mutateModules (
     const frozenLockfile = opts.frozenLockfile ||
       opts.frozenLockfileIfExists && ctx.existsNonEmptyWantedLockfile
     let outdatedLockfileSettings = false
-    const overridesMap = Object.fromEntries((opts.parsedOverrides ?? []).map(({ selector, newPref }) => [selector, newPref]))
+    const overridesMap = createOverridesMapFromParsed(opts.parsedOverrides)
     if (!opts.ignorePackageManifest) {
       const outdatedLockfileSettingName = getOutdatedLockfileSetting(ctx.wantedLockfile, {
         autoInstallPeers: opts.autoInstallPeers,
@@ -439,7 +454,7 @@ Note that in CI environments, this setting is enabled by default.`,
 
             throw new PnpmError('OUTDATED_LOCKFILE',
               `Cannot install with "frozen-lockfile" because ${WANTED_LOCKFILE} is not up to date with ` +
-              path.relative(opts.lockfileDir, path.join(rootDir, 'package.json')), {
+              path.join('<ROOT>', path.relative(opts.lockfileDir, path.join(rootDir, 'package.json'))), {
                 hint: `Note that in CI environments this setting is true by default. If you still need to run install in such cases, use "pnpm install --no-frozen-lockfile"
 
     Failure reason:
@@ -567,70 +582,6 @@ Note that in CI environments, this setting is enabled by default.`,
         })
         break
       }
-      case 'unlink': {
-        const packageDirs = await readModulesDir(projectOpts.modulesDir)
-        const externalPackages = await pFilter(
-          packageDirs!,
-          async (packageDir: string) => isExternalLink(ctx.storeDir, projectOpts.modulesDir, packageDir)
-        )
-        const allDeps = getAllDependenciesFromManifest(projectOpts.manifest)
-        const packagesToInstall: string[] = []
-        for (const pkgName of externalPackages) {
-          await rimraf(path.join(projectOpts.modulesDir, pkgName))
-          if (allDeps[pkgName]) {
-            packagesToInstall.push(pkgName)
-          }
-        }
-        if (packagesToInstall.length === 0) {
-          return {
-            updatedProjects: projects.map((mutatedProject) => ctx.projects[mutatedProject.rootDir]),
-          }
-        }
-
-        // TODO: install only those that were unlinked
-        // but don't update their version specs in package.json
-        await installCase({ ...projectOpts, mutation: 'install' })
-        break
-      }
-      case 'unlinkSome': {
-        if (projectOpts.manifest?.name && opts.globalBin) {
-          await removeBin(path.join(opts.globalBin, projectOpts.manifest?.name))
-        }
-        const packagesToInstall: string[] = []
-        const allDeps = getAllDependenciesFromManifest(projectOpts.manifest)
-        for (const depName of project.dependencyNames) {
-          try {
-            if (!await isExternalLink(ctx.storeDir, projectOpts.modulesDir, depName)) {
-              logger.warn({
-                message: `${depName} is not an external link`,
-                prefix: project.rootDir,
-              })
-              continue
-            }
-          } catch (err: any) { // eslint-disable-line
-            if (err['code'] !== 'ENOENT') throw err
-          }
-          await rimraf(path.join(projectOpts.modulesDir, depName))
-          if (allDeps[depName]) {
-            packagesToInstall.push(depName)
-          }
-        }
-        if (packagesToInstall.length === 0) {
-          return {
-            updatedProjects: projects.map((mutatedProject) => ctx.projects[mutatedProject.rootDir]),
-          }
-        }
-
-        // TODO: install only those that were unlinked
-        // but don't update their version specs in package.json
-        await installSome({
-          ...projectOpts,
-          dependencySelectors: packagesToInstall,
-          mutation: 'installSome',
-          updatePackageManifest: false,
-        })
-        break
-      }
       }
     }
     /* eslint-enable no-await-in-loop */
@@ -742,95 +693,8 @@ Note that in CI environments, this setting is enabled by default.`,
   }
 }
 
-interface PatchHash {
-  hash: string
-  path: string
-}
-
-async function calcPatchHashes (patches: Record<string, string>, lockfileDir: string): Promise<Record<string, PatchHash>> {
-  return pMapValues(async (patchFilePath) => {
-    return {
-      hash: await createBase32HashFromFile(patchFilePath),
-      path: path.relative(lockfileDir, patchFilePath).replaceAll('\\', '/'),
-    }
-  }, patches)
-}
-
-type ChangedField =
-  | 'patchedDependencies'
-  | 'overrides'
-  | 'packageExtensionsChecksum'
-  | 'ignoredOptionalDependencies'
-  | 'settings.autoInstallPeers'
-  | 'settings.excludeLinksFromLockfile'
-  | 'settings.peersSuffixMaxLength'
-  | 'pnpmfileChecksum'
-
-function getOutdatedLockfileSetting (
-  lockfile: Lockfile,
-  {
-    overrides,
-    packageExtensionsChecksum,
-    ignoredOptionalDependencies,
-    patchedDependencies,
-    autoInstallPeers,
-    excludeLinksFromLockfile,
-    peersSuffixMaxLength,
-    pnpmfileChecksum,
-  }: {
-    overrides?: Record<string, string>
-    packageExtensionsChecksum?: string
-    patchedDependencies?: Record<string, PatchFile>
-    ignoredOptionalDependencies?: string[]
-    autoInstallPeers?: boolean
-    excludeLinksFromLockfile?: boolean
-    peersSuffixMaxLength?: number
-    pnpmfileChecksum?: string
-  }
-): ChangedField | null {
-  if (!equals(lockfile.overrides ?? {}, overrides ?? {})) {
-    return 'overrides'
-  }
-  if (lockfile.packageExtensionsChecksum !== packageExtensionsChecksum) {
-    return 'packageExtensionsChecksum'
-  }
-  if (!equals(lockfile.ignoredOptionalDependencies?.sort() ?? [], ignoredOptionalDependencies?.sort() ?? [])) {
-    return 'ignoredOptionalDependencies'
-  }
-  if (!equals(lockfile.patchedDependencies ?? {}, patchedDependencies ?? {})) {
-    return 'patchedDependencies'
-  }
-  if ((lockfile.settings?.autoInstallPeers != null && lockfile.settings.autoInstallPeers !== autoInstallPeers)) {
-    return 'settings.autoInstallPeers'
-  }
-  if (lockfile.settings?.excludeLinksFromLockfile != null && lockfile.settings.excludeLinksFromLockfile !== excludeLinksFromLockfile) {
-    return 'settings.excludeLinksFromLockfile'
-  }
-  if (
-    lockfile.settings?.peersSuffixMaxLength != null && lockfile.settings.peersSuffixMaxLength !== peersSuffixMaxLength ||
-    lockfile.settings?.peersSuffixMaxLength == null && peersSuffixMaxLength !== 1000
-  ) {
-    return 'settings.peersSuffixMaxLength'
-  }
-  if (lockfile.pnpmfileChecksum !== pnpmfileChecksum) {
-    return 'pnpmfileChecksum'
-  }
-  return null
-}
-
-export function createObjectChecksum (obj: Record<string, unknown>): string {
-  const s = JSON.stringify(sortKeys(obj, { deep: true }))
-  return crypto.createHash('md5').update(s).digest('hex')
-}
-
 function cacheExpired (prunedAt: string, maxAgeInMinutes: number): boolean {
   return ((Date.now() - new Date(prunedAt).valueOf()) / (1000 * 60)) > maxAgeInMinutes
-}
-
-async function isExternalLink (storeDir: string, modules: string, pkgName: string): Promise<boolean> {
-  const link = await isInnerLink(modules, pkgName)
-
-  return !link.isInner
 }
 
 function pkgHasDependencies (manifest: ProjectManifest): boolean {
@@ -1279,13 +1143,13 @@ const _installInContext: InstallFunction = async (projects, ctx, opts) => {
     await Promise.all(projects.map(async (project, index) => {
       let linkedPackages!: string[]
       if (ctx.publicHoistPattern?.length && path.relative(project.rootDir, opts.lockfileDir) === '') {
-        const nodeExecPathByAlias = Object.entries(project.manifest.dependenciesMeta ?? {})
-          .reduce((prev, [alias, { node }]) => {
-            if (node) {
-              prev[alias] = node
-            }
-            return prev
-          }, {} as Record<string, string>)
+        const nodeExecPathByAlias: Record<string, string> = {}
+        for (const alias in project.manifest.dependenciesMeta) {
+          const { node } = project.manifest.dependenciesMeta[alias]
+          if (node) {
+            nodeExecPathByAlias[alias] = node
+          }
+        }
         linkedPackages = await linkBins(project.modulesDir, project.binsDir, {
           allowExoticManifests: true,
           preferSymlinkedExecutables: opts.preferSymlinkedExecutables,
@@ -1332,11 +1196,13 @@ const _installInContext: InstallFunction = async (projects, ctx, opts) => {
       }
       const projectToInstall = projects[index]
       if (opts.global && projectToInstall.mutation.includes('install')) {
-        projectToInstall.wantedDependencies.forEach(pkg => {
-          if (!linkedPackages?.includes(pkg.alias)) {
-            logger.warn({ message: `${pkg.alias ?? pkg.pref} has no binaries`, prefix: opts.lockfileDir })
+        for (const pkg of projectToInstall.wantedDependencies) {
+          // This warning is never printed currently during "pnpm link --global"
+          // due to the following issue: https://github.com/pnpm/pnpm/issues/4761
+          if (pkg.alias && !linkedPackages?.includes(pkg.alias)) {
+            logger.warn({ message: `${pkg.alias} has no binaries`, prefix: opts.lockfileDir })
           }
-        })
+        }
       }
     }))
 
@@ -1403,7 +1269,7 @@ const _installInContext: InstallFunction = async (projects, ctx, opts) => {
       )
     }
   } else {
-    if (opts.useLockfile && !isInstallationOnlyForLockfileCheck) {
+    if (opts.useLockfile && opts.saveLockfile && !isInstallationOnlyForLockfileCheck) {
       await writeWantedLockfile(ctx.lockfileDir, newLockfile, lockfileOpts)
     }
 

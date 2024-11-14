@@ -1,5 +1,63 @@
 # @pnpm/resolve-dependencies
 
+## 36.0.6
+
+### Patch Changes
+
+- Updated dependencies [222d10a]
+  - @pnpm/npm-resolver@21.1.1
+  - @pnpm/dependency-path@5.1.7
+  - @pnpm/lockfile.pruner@0.0.6
+  - @pnpm/lockfile.utils@1.0.4
+  - @pnpm/lockfile.preferred-versions@1.0.14
+
+## 36.0.5
+
+### Patch Changes
+
+- 4f4e073: `pnpm update --latest` should not update the automatically installed peer dependencies [#6657](https://github.com/pnpm/pnpm/issues/6657).
+
+## 36.0.4
+
+### Patch Changes
+
+- d7b9ae5: Fix peer dependency resolution dead lock [#8570](https://github.com/pnpm/pnpm/issues/8570). This change might change some of the keys in the `snapshots` field inside `pnpm-lock.yaml` but it should happen very rarely.
+- Updated dependencies [83681da]
+  - @pnpm/constants@9.0.0
+  - @pnpm/npm-resolver@21.1.0
+  - @pnpm/lockfile.pruner@0.0.5
+  - @pnpm/error@6.0.2
+  - @pnpm/catalogs.resolver@0.1.1
+  - @pnpm/manifest-utils@6.0.9
+  - @pnpm/read-package-json@9.0.9
+  - @pnpm/lockfile.preferred-versions@1.0.13
+
+## 36.0.3
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/types@12.2.0
+  - @pnpm/pick-registry-for-package@6.0.7
+  - @pnpm/lockfile.preferred-versions@1.0.12
+  - @pnpm/lockfile.pruner@0.0.4
+  - @pnpm/lockfile.types@1.0.3
+  - @pnpm/lockfile.utils@1.0.3
+  - @pnpm/core-loggers@10.0.7
+  - @pnpm/dependency-path@5.1.6
+  - @pnpm/manifest-utils@6.0.8
+  - @pnpm/read-package-json@9.0.8
+  - @pnpm/npm-resolver@21.0.5
+  - @pnpm/resolver-base@13.0.4
+  - @pnpm/store-controller-types@18.1.6
+  - @pnpm/pick-fetcher@3.0.0
+
+## 36.0.2
+
+### Patch Changes
+
+- 96aa4bc: Reduce memory usage during peer dependencies resolution [#8478](https://github.com/pnpm/pnpm/pull/8478).
+
 ## 36.0.1
 
 ### Patch Changes

@@ -1,5 +1,35 @@
 # @pnpm/npm-resolver
 
+## 21.1.1
+
+### Patch Changes
+
+- 222d10a: Use `crypto.hash`, when available, for improved performance [#8629](https://github.com/pnpm/pnpm/pull/8629).
+- Updated dependencies [222d10a]
+- Updated dependencies [222d10a]
+  - @pnpm/crypto.polyfill@1.0.0
+
+## 21.1.0
+
+### Minor Changes
+
+- 83681da: Keep `libc` field in `clearMeta`.
+
+### Patch Changes
+
+- Updated dependencies [83681da]
+  - @pnpm/constants@9.0.0
+  - @pnpm/error@6.0.2
+
+## 21.0.5
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/types@12.2.0
+  - @pnpm/core-loggers@10.0.7
+  - @pnpm/resolver-base@13.0.4
+
 ## 21.0.4
 
 ### Patch Changes

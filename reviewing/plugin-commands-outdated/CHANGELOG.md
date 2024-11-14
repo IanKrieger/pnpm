@@ -1,5 +1,53 @@
 # @pnpm/plugin-commands-outdated
 
+## 12.1.2
+
+### Patch Changes
+
+- 3804a25: Add missing `--format` description in `pnpm outdated --help` command
+  - @pnpm/default-resolver@20.0.9
+  - @pnpm/outdated@15.1.7
+  - @pnpm/cli-utils@4.0.7
+  - @pnpm/config@21.8.5
+  - @pnpm/lockfile.fs@1.0.5
+
+## 12.1.1
+
+### Patch Changes
+
+- @pnpm/cli-utils@4.0.6
+- @pnpm/config@21.8.4
+- @pnpm/outdated@15.1.6
+
+## 12.1.0
+
+### Minor Changes
+
+- f6e9677: `pnpm outdated` command supports now a `--sort-by=name` option for sorting outdated dependencies by package name [#8523](https://github.com/pnpm/pnpm/pull/8523).
+
+### Patch Changes
+
+- @pnpm/config@21.8.4
+- @pnpm/lockfile.fs@1.0.4
+- @pnpm/error@6.0.2
+- @pnpm/outdated@15.1.5
+- @pnpm/default-resolver@20.0.8
+- @pnpm/cli-utils@4.0.6
+- @pnpm/store-path@9.0.2
+
+## 12.0.10
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/types@12.2.0
+  - @pnpm/cli-utils@4.0.5
+  - @pnpm/config@21.8.3
+  - @pnpm/lockfile.fs@1.0.3
+  - @pnpm/modules-yaml@13.1.7
+  - @pnpm/outdated@15.1.4
+  - @pnpm/default-resolver@20.0.7
+
 ## 12.0.9
 
 ### Patch Changes

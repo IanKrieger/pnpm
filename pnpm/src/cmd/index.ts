@@ -1,3 +1,4 @@
+import { cache } from '@pnpm/cache.commands'
 import { type CompletionFunc } from '@pnpm/command'
 import { types as allTypes } from '@pnpm/config'
 import { audit } from '@pnpm/plugin-commands-audit'
@@ -20,7 +21,6 @@ import {
   exec,
   restart,
   run,
-  test,
 } from '@pnpm/plugin-commands-script-runners'
 import { server } from '@pnpm/plugin-commands-server'
 import { setup } from '@pnpm/plugin-commands-setup'
@@ -107,6 +107,7 @@ const commands: CommandDefinition[] = [
   add,
   audit,
   bin,
+  cache,
   ci,
   config,
   dedupe,
@@ -148,7 +149,6 @@ const commands: CommandDefinition[] = [
   catFile,
   catIndex,
   findHash,
-  test,
   unlink,
   update,
   why,

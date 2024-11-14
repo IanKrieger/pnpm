@@ -1,5 +1,157 @@
 # @pnpm/core
 
+## 15.3.8
+
+### Patch Changes
+
+- 222d10a: Use `crypto.hash`, when available, for improved performance [#8629](https://github.com/pnpm/pnpm/pull/8629).
+- Updated dependencies [f9a095c]
+- Updated dependencies [222d10a]
+- Updated dependencies [222d10a]
+  - @pnpm/get-context@12.0.7
+  - @pnpm/crypto.polyfill@1.0.0
+  - @pnpm/worker@1.0.13
+  - @pnpm/lockfile.verification@1.0.6
+  - @pnpm/crypto.base32-hash@3.0.1
+  - @pnpm/resolve-dependencies@36.0.6
+  - @pnpm/build-modules@14.0.5
+  - @pnpm/headless@23.2.8
+  - @pnpm/package-requester@25.2.10
+  - @pnpm/lockfile.settings-checker@1.0.1
+  - @pnpm/dependency-path@5.1.7
+  - @pnpm/lockfile.filtering@1.0.7
+  - @pnpm/lockfile.fs@1.0.5
+  - @pnpm/lockfile-to-pnp@4.1.14
+  - @pnpm/lockfile.pruner@0.0.6
+  - @pnpm/lockfile.utils@1.0.4
+  - @pnpm/lockfile.walker@1.0.4
+  - @pnpm/calc-dep-state@7.0.10
+  - @pnpm/hoist@9.1.15
+  - @pnpm/modules-cleaner@15.1.16
+  - @pnpm/lockfile.preferred-versions@1.0.14
+  - @pnpm/lifecycle@17.1.5
+  - @pnpm/symlink-dependency@8.0.8
+  - @pnpm/link-bins@10.0.11
+
+## 15.3.7
+
+### Patch Changes
+
+- a943fc9: When the lockfile is not up to date make it clear what `package.json` is out of sync.
+  - @pnpm/headless@23.2.7
+  - @pnpm/package-requester@25.2.9
+  - @pnpm/worker@1.0.12
+  - @pnpm/build-modules@14.0.4
+  - @pnpm/lifecycle@17.1.5
+  - @pnpm/symlink-dependency@8.0.8
+  - @pnpm/lockfile.settings-checker@1.0.0
+  - @pnpm/lockfile.verification@1.0.5
+  - @pnpm/crypto.base32-hash@3.0.0
+  - @pnpm/link-bins@10.0.11
+
+## 15.3.6
+
+### Patch Changes
+
+- Updated dependencies [4f4e073]
+- Updated dependencies [17b5088]
+- Updated dependencies [51f3ba1]
+  - @pnpm/resolve-dependencies@36.0.5
+  - @pnpm/lockfile.filtering@1.0.6
+  - @pnpm/lockfile.settings-checker@1.0.0
+  - @pnpm/headless@23.2.6
+  - @pnpm/modules-cleaner@15.1.15
+
+## 15.3.5
+
+### Patch Changes
+
+- Updated dependencies [83681da]
+- Updated dependencies [b7fb704]
+- Updated dependencies [d7b9ae5]
+  - @pnpm/constants@9.0.0
+  - @pnpm/hooks.read-package-hook@5.1.0
+  - @pnpm/resolve-dependencies@36.0.4
+  - @pnpm/lockfile.filtering@1.0.5
+  - @pnpm/lockfile.fs@1.0.4
+  - @pnpm/lockfile.pruner@0.0.5
+  - @pnpm/lockfile.verification@1.0.5
+  - @pnpm/calc-dep-state@7.0.9
+  - @pnpm/error@6.0.2
+  - @pnpm/get-context@12.0.6
+  - @pnpm/headless@23.2.5
+  - @pnpm/hoist@9.1.14
+  - @pnpm/modules-cleaner@15.1.14
+  - @pnpm/lockfile-to-pnp@4.1.13
+  - @pnpm/build-modules@14.0.3
+  - @pnpm/parse-overrides@5.1.1
+  - @pnpm/lifecycle@17.1.5
+  - @pnpm/link-bins@10.0.11
+  - @pnpm/package-requester@25.2.8
+  - @pnpm/manifest-utils@6.0.9
+  - @pnpm/read-project-manifest@6.0.9
+  - @pnpm/worker@1.0.11
+  - @pnpm/symlink-dependency@8.0.8
+  - @pnpm/crypto.base32-hash@3.0.0
+  - @pnpm/lockfile.preferred-versions@1.0.13
+  - @pnpm/remove-bins@6.0.9
+
+## 15.3.4
+
+### Patch Changes
+
+- e50baa8: Don't print a warning when linking packages globally [#4761](https://github.com/pnpm/pnpm/issues/4761).
+- ad1fd64: Do not save lockfile when `saveLockfile` is `false`.
+- Updated dependencies [ad1fd64]
+  - @pnpm/headless@23.2.4
+
+## 15.3.3
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/types@12.2.0
+  - @pnpm/normalize-registries@6.0.7
+  - @pnpm/build-modules@14.0.2
+  - @pnpm/lifecycle@17.1.4
+  - @pnpm/symlink-dependency@8.0.8
+  - @pnpm/hooks.read-package-hook@5.0.3
+  - @pnpm/hooks.types@2.0.9
+  - @pnpm/lockfile.filtering@1.0.4
+  - @pnpm/lockfile.fs@1.0.3
+  - @pnpm/lockfile-to-pnp@4.1.12
+  - @pnpm/lockfile.preferred-versions@1.0.12
+  - @pnpm/lockfile.pruner@0.0.4
+  - @pnpm/lockfile.utils@1.0.3
+  - @pnpm/lockfile.verification@1.0.4
+  - @pnpm/lockfile.walker@1.0.3
+  - @pnpm/calc-dep-state@7.0.8
+  - @pnpm/core-loggers@10.0.7
+  - @pnpm/dependency-path@5.1.6
+  - @pnpm/get-context@12.0.5
+  - @pnpm/headless@23.2.3
+  - @pnpm/hoist@9.1.13
+  - @pnpm/link-bins@10.0.10
+  - @pnpm/modules-cleaner@15.1.13
+  - @pnpm/modules-yaml@13.1.7
+  - @pnpm/package-requester@25.2.7
+  - @pnpm/remove-bins@6.0.8
+  - @pnpm/resolve-dependencies@36.0.3
+  - @pnpm/manifest-utils@6.0.8
+  - @pnpm/read-project-manifest@6.0.8
+  - @pnpm/resolver-base@13.0.4
+  - @pnpm/store-controller-types@18.1.6
+  - @pnpm/worker@1.0.10
+  - @pnpm/crypto.base32-hash@3.0.0
+  - @pnpm/pkg-manager.direct-dep-linker@3.0.8
+
+## 15.3.2
+
+### Patch Changes
+
+- Updated dependencies [96aa4bc]
+  - @pnpm/resolve-dependencies@36.0.2
+
 ## 15.3.1
 
 ### Patch Changes

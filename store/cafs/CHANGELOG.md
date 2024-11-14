@@ -1,5 +1,28 @@
 # @pnpm/store.cafs
 
+## 4.0.2
+
+### Patch Changes
+
+- a1f4df2: Fixed a race condition in temporary file creation in the store by including worker thread ID in filename. Previously, multiple worker threads could attempt to use the same temporary file. Temporary files now include both process ID and thread ID for uniqueness [#8703](https://github.com/pnpm/pnpm/pull/8703).
+
+## 4.0.1
+
+### Patch Changes
+
+- db7ff76: When checking whether a file in the store has executable permissions, the new approach checks if at least one of the executable bits (owner, group, and others) is set to 1. Previously, a file was incorrectly considered executable only when all the executable bits were set to 1. This fix ensures that files with any executable permission, regardless of the user class, are now correctly identified as executable [#8546](https://github.com/pnpm/pnpm/issues/8546).
+
+## 4.0.0
+
+### Major Changes
+
+- db420ab: `getFilePathInCafs` renamed to `getIndexFilePathInCafs`.
+
+### Patch Changes
+
+- @pnpm/fetcher-base@16.0.7
+- @pnpm/store-controller-types@18.1.6
+
 ## 3.0.8
 
 ### Patch Changes

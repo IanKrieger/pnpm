@@ -1,5 +1,60 @@
 # @pnpm/audit
 
+## 8.2.2
+
+### Patch Changes
+
+- Updated dependencies [222d10a]
+  - @pnpm/list@10.2.2
+  - @pnpm/lockfile.detect-dep-types@2.0.9
+  - @pnpm/lockfile.utils@1.0.4
+  - @pnpm/lockfile.walker@1.0.4
+
+## 8.2.1
+
+### Patch Changes
+
+- Updated dependencies [44b8935]
+  - @pnpm/list@10.2.1
+  - @pnpm/error@6.0.2
+  - @pnpm/read-project-manifest@6.0.9
+
+## 8.2.0
+
+### Minor Changes
+
+- d500d9f: Added a new setting to `package.json` at `pnpm.auditConfig.ignoreGhsas` for ignoring vulnerabilities by their GHSA code [#6838](https://github.com/pnpm/pnpm/issues/6838).
+
+  For instance:
+
+  ```json
+  {
+    "pnpm": {
+      "auditConfig": {
+        "ignoreGhsas": [
+          "GHSA-42xw-2xvc-qx8m",
+          "GHSA-4w2v-q235-vp99",
+          "GHSA-cph5-m8f7-6c5x",
+          "GHSA-vh95-rmgr-6w4m"
+        ]
+      }
+    }
+  }
+  ```
+
+### Patch Changes
+
+- Updated dependencies [3af07cb]
+- Updated dependencies [d500d9f]
+  - @pnpm/list@10.2.0
+  - @pnpm/types@12.2.0
+  - @pnpm/lockfile.detect-dep-types@2.0.8
+  - @pnpm/lockfile.types@1.0.3
+  - @pnpm/lockfile.utils@1.0.3
+  - @pnpm/lockfile.walker@1.0.3
+  - @pnpm/fetch@8.0.7
+  - @pnpm/read-project-manifest@6.0.8
+
 ## 8.1.10
 
 ### Patch Changes

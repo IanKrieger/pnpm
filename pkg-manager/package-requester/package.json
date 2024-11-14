@@ -1,6 +1,6 @@
 {
   "name": "@pnpm/package-requester",
-  "version": "25.2.6",
+  "version": "25.2.10",
   "description": "Concurrent downloader of npm-compatible packages",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -14,14 +14,14 @@
   "scripts": {
     "start": "tsc --watch",
     "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\"",
-    "_test": "cross-env PNPM_REGISTRY_MOCK_PORT=7774 jest",
+    "_test": "cross-env PNPM_REGISTRY_MOCK_PORT=7775 jest",
     "test": "pnpm run compile && pnpm run _test",
     "prepublishOnly": "pnpm run compile",
     "compile": "tsc --build && pnpm run lint --fix"
   },
   "repository": "https://github.com/pnpm/pnpm/blob/main/pkg-manager/package-requester",
   "keywords": [
-    "pnpm9",
+    "pnpm10",
     "pnpm",
     "resolver",
     "npm"
@@ -77,5 +77,8 @@
   "funding": "https://opencollective.com/pnpm",
   "exports": {
     ".": "./lib/index.js"
+  },
+  "jest": {
+    "preset": "@pnpm/jest-config"
   }
 }

@@ -1,5 +1,50 @@
 # @pnpm/worker
 
+## 1.0.13
+
+### Patch Changes
+
+- 222d10a: Use `crypto.hash`, when available, for improved performance [#8629](https://github.com/pnpm/pnpm/pull/8629).
+- Updated dependencies [222d10a]
+- Updated dependencies [222d10a]
+- Updated dependencies [a1f4df2]
+  - @pnpm/crypto.polyfill@1.0.0
+  - @pnpm/store.cafs@4.0.2
+  - @pnpm/create-cafs-store@7.0.11
+  - @pnpm/fs.hard-link-dir@4.0.0
+  - @pnpm/symlink-dependency@8.0.8
+
+## 1.0.12
+
+### Patch Changes
+
+- Updated dependencies [db7ff76]
+  - @pnpm/store.cafs@4.0.1
+  - @pnpm/create-cafs-store@7.0.10
+  - @pnpm/fs.hard-link-dir@4.0.0
+  - @pnpm/symlink-dependency@8.0.8
+
+## 1.0.11
+
+### Patch Changes
+
+- @pnpm/error@6.0.2
+- @pnpm/fs.hard-link-dir@4.0.0
+- @pnpm/symlink-dependency@8.0.8
+- @pnpm/create-cafs-store@7.0.9
+
+## 1.0.10
+
+### Patch Changes
+
+- Updated dependencies [db420ab]
+  - @pnpm/store.cafs@4.0.0
+  - @pnpm/exec.pkg-requires-build@1.0.7
+  - @pnpm/symlink-dependency@8.0.8
+  - @pnpm/cafs-types@5.0.0
+  - @pnpm/create-cafs-store@7.0.9
+  - @pnpm/fs.hard-link-dir@4.0.0
+
 ## 1.0.9
 
 ### Patch Changes

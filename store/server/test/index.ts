@@ -164,15 +164,21 @@ test('server upload', async () => {
   const storeCtrl = await connectStoreController({ remotePrefix, concurrency: 100 })
 
   const fakeEngine = 'client-engine'
-  const filesIndexFile = path.join(storeDir, 'test.example.com/fake-pkg/1.0.0.json')
+  const filesIndexFile = path.join(storeDir, 'fake-pkg@1.0.0.json')
 
-  await storeCtrl.upload(path.join(__dirname, 'side-effect-fake-dir'), {
+  fs.writeFileSync(filesIndexFile, JSON.stringify({
+    name: 'fake-pkg',
+    version: '1.0.0',
+    files: {},
+  }), 'utf8')
+
+  await storeCtrl.upload(path.join(__dirname, '__fixtures__/side-effect-fake-dir'), {
     sideEffectsCacheKey: fakeEngine,
     filesIndexFile,
   })
 
   const cacheIntegrity = loadJsonFile.sync<any>(filesIndexFile) // eslint-disable-line @typescript-eslint/no-explicit-any
-  expect(Object.keys(cacheIntegrity?.['sideEffects'][fakeEngine]).sort()).toStrictEqual(['side-effect.js', 'side-effect.txt'])
+  expect(Object.keys(cacheIntegrity?.['sideEffects'][fakeEngine].added).sort()).toStrictEqual(['side-effect.js', 'side-effect.txt'])
 
   await server.close()
   await storeCtrl.close()
@@ -198,11 +204,11 @@ test('disable server upload', async () => {
 
   let thrown = false
   try {
-    await storeCtrl.upload(path.join(__dirname, 'side-effect-fake-dir'), {
+    await storeCtrl.upload(path.join(__dirname, '__fixtures__/side-effect-fake-dir'), {
       sideEffectsCacheKey: fakeEngine,
       filesIndexFile,
     })
-  } catch (e) {
+  } catch {
     thrown = true
   }
   expect(thrown).toBeTruthy()

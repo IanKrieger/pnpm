@@ -1,5 +1,61 @@
 # @pnpm/plugin-commands-audit
 
+## 10.3.2
+
+### Patch Changes
+
+- @pnpm/audit@8.2.2
+- @pnpm/cli-utils@4.0.7
+- @pnpm/config@21.8.5
+- @pnpm/lockfile.fs@1.0.5
+
+## 10.3.1
+
+### Patch Changes
+
+- Updated dependencies [83681da]
+  - @pnpm/constants@9.0.0
+  - @pnpm/audit@8.2.1
+  - @pnpm/config@21.8.4
+  - @pnpm/lockfile.fs@1.0.4
+  - @pnpm/error@6.0.2
+  - @pnpm/cli-utils@4.0.6
+  - @pnpm/network.auth-header@3.0.2
+  - @pnpm/read-project-manifest@6.0.9
+
+## 10.3.0
+
+### Minor Changes
+
+- d500d9f: Added a new setting to `package.json` at `pnpm.auditConfig.ignoreGhsas` for ignoring vulnerabilities by their GHSA code [#6838](https://github.com/pnpm/pnpm/issues/6838).
+
+  For instance:
+
+  ```json
+  {
+    "pnpm": {
+      "auditConfig": {
+        "ignoreGhsas": [
+          "GHSA-42xw-2xvc-qx8m",
+          "GHSA-4w2v-q235-vp99",
+          "GHSA-cph5-m8f7-6c5x",
+          "GHSA-vh95-rmgr-6w4m"
+        ]
+      }
+    }
+  }
+  ```
+
+### Patch Changes
+
+- Updated dependencies [d500d9f]
+  - @pnpm/audit@8.2.0
+  - @pnpm/types@12.2.0
+  - @pnpm/cli-utils@4.0.5
+  - @pnpm/config@21.8.3
+  - @pnpm/lockfile.fs@1.0.3
+  - @pnpm/read-project-manifest@6.0.8
+
 ## 10.2.11
 
 ### Patch Changes

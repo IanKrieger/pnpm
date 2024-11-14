@@ -1,5 +1,28 @@
 # @pnpm/plugin-commands-init
 
+## 4.0.23
+
+### Patch Changes
+
+- @pnpm/cli-utils@4.0.7
+- @pnpm/config@21.8.5
+
+## 4.0.22
+
+### Patch Changes
+
+- @pnpm/config@21.8.4
+- @pnpm/error@6.0.2
+- @pnpm/cli-utils@4.0.6
+
+## 4.0.21
+
+### Patch Changes
+
+- @pnpm/cli-utils@4.0.5
+- @pnpm/config@21.8.3
+- @pnpm/write-project-manifest@6.0.7
+
 ## 4.0.20
 
 ### Patch Changes
